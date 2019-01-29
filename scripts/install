@@ -220,7 +220,7 @@ ynh_system_user_create $app
 # MODIFY A CONFIG FILE
 #=================================================
 
-cp -f ../config.sample.yml "$final_path/config.yml"
+cp -f ../conf/config.sample.yml "$final_path/config.yml"
 
 ### `ynh_replace_string` is used to replace a string in a file.
 ### (It's compatible with sed regular expressions syntax)
