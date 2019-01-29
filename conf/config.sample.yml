@@ -1,0 +1,57 @@
+#######################################################################
+# Wiki.js - CONFIGURATION                                             #
+#######################################################################
+# Full documentation + examples:
+# https://docs.requarks.io/wiki/install
+
+# ---------------------------------------------------------------------
+# Port the server should listen to
+# ---------------------------------------------------------------------
+
+port: 3000
+
+# ---------------------------------------------------------------------
+# IP address the server should listen to
+# ---------------------------------------------------------------------
+# Do not change unless you know what you are doing!
+
+bindIP: 0.0.0.0
+
+# ---------------------------------------------------------------------
+# Database
+# ---------------------------------------------------------------------
+# Supported Database Engines:
+# - postgres = PostgreSQL 9.5 or later
+# - mysql = MySQL 5.7.8
+# - mariadb = MariaDB 10.2.7 or later
+# - mssql = MS SQL Server 2012 or later
+# - sqlite = SQLite 3.9 or later
+
+db:
+  type: mysql
+  # PostgreSQL / MySQL / MariaDB / MS SQL Server only:
+  host: localhost
+  port: 3306
+  user: __DB_USER__
+  pass: __DB_PWD__
+  db: __DB_NAME__
+  # SQLite only:
+  storage: path/to/database.sqlite
+
+# ---------------------------------------------------------------------
+# Redis
+# ---------------------------------------------------------------------
+# Redis 3.2 or later required
+
+redis:
+  host: localhost
+  port: 6379
+  db: 0
+  password: null
+
+# ---------------------------------------------------------------------
+# Log Level
+# ---------------------------------------------------------------------
+# Possible values: error, warn, info (default), verbose, debug, silly
+
+logLevel: info
