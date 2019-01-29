@@ -30,8 +30,8 @@ bindIP: 0.0.0.0
 db:
   type: mysql
   # PostgreSQL / MySQL / MariaDB / MS SQL Server only:
-  host: localhost
-  port: 3306
+  host: postgres
+  port: 5432
   user: __DB_NAME__
   pass: __DB_PWD__
   db: __DB_NAME__

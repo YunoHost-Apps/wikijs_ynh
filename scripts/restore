@@ -55,12 +55,14 @@ ynh_restore_file "/etc/nginx/conf.d/$domain.d/$app.conf"
 ynh_restore_file "$final_path"
 
 #=================================================
-# RESTORE THE MYSQL DATABASE
+# RESTORE THE POSTGRESQL DATABASE
 #=================================================
 
-db_pwd=$(ynh_app_setting_get $app mysqlpwd)
-ynh_mysql_setup_db $db_name $db_name $db_pwd
-ynh_mysql_connect_as $db_name $db_pwd $db_name < ./db.sql
+ynh_install_app_dependencies postgresql postgresql-contrib
+ynh_psql_test_if_first_run
+ynh_psql_create_user "$db_name" "$db_pwd"
+ynh_psql_create_db "$db_name" "$db_name" "$db_pwd"
+ynh_psql_execute_file_as_root ./db.sql "$db_name"
 
 #=================================================
 # RECREATE THE DEDICATED USER
