@@ -32,7 +32,7 @@ db:
   # PostgreSQL / MySQL / MariaDB / MS SQL Server only:
   host: localhost
   port: 3306
-  user: __DB_USER__
+  user: __DB_NAME__
   pass: __DB_PWD__
   db: __DB_NAME__
   # SQLite only:
