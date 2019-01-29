@@ -127,7 +127,7 @@ ynh_mysql_setup_db $db_name $db_name
 ynh_app_setting_set $app final_path $final_path
 # Download, check integrity, uncompress and patch the source from app.src
 #ynh_setup_source "$final_path"
-git clone https://github.com/Requarks/wiki "$final_path/$app"
+git clone https://github.com/Requarks/wiki "$final_path"
 
 #=================================================
 # NGINX CONFIGURATION

@@ -77,7 +77,7 @@ path_url=$(ynh_normalize_url_path $path_url)
 
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source "$final_path"
-( cd $final_path/$app && git pull )
+( cd $final_path && git pull )
 
 #=================================================
 # NGINX CONFIGURATION
