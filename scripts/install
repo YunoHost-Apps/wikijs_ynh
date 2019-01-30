@@ -117,7 +117,6 @@ db_pwd=$(ynh_string_random 30)
 ynh_app_setting_set "$app" psql_db "$db_name"
 ynh_app_setting_set "$app" psqlpwd "$db_pwd"
 ynh_psql_test_if_first_run
-ynh_psql_create_user "$db_name" "$db_pwd"
 ynh_psql_create_db "$db_name" "$db_name" "$db_pwd"
 
 #=================================================
@@ -172,6 +171,10 @@ ynh_system_user_create $app
 #=================================================
 # ...
 #=================================================
+
+pushd $final_path
+popd
+
 
 #=================================================
 # SETUP SYSTEMD
