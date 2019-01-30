@@ -172,22 +172,15 @@ ynh_system_user_create $app
 # ...
 #=================================================
 
-chown -R $app: $final_path
-
-
-ynh_use_nodejs
-export PATH="$PATH:$nodejs_path"
-
-
-( cd $final_path && sudo -u "$app" npm install "graphql@^0.13.1" )
 pushd $final_path
-#sudo -u "$app" npm install "graphql@^0.13.1"
-sudo -u "$app" npm install "acorn@^6.0.0"
-sudo -u "$app" npm install "babel-core@>=6.0.20"
-sudo -u "$app" npm install "eslint@>=5.0.0"
-sudo -u "$app" npm install
-sudo -u "$app" npm audit fix
-sudo -u "$app" npm run build
+ynh_use_nodejs
+npm install "graphql@^0.13.1"
+npm install "acorn@^6.0.0"
+npm install "babel-core@>=6.0.20"
+npm install "eslint@>=5.0.0"
+npm install
+npm audit fix
+npm run build
 popd
 
 
