@@ -174,10 +174,10 @@ ynh_system_user_create $app
 
 pushd $final_path
 ynh_use_nodejs
-npm install graphql@^0.13.1
-npm install acorn@^6.0.0
-npm install babel-core@>=6.0.20
-npm install eslint@>=5.0.0
+npm install "graphql@^0.13.1"
+npm install "acorn@^6.0.0"
+npm install "babel-core@>=6.0.20"
+npm install "eslint@>=5.0.0"
 npm install
 npm audit fix
 npm run build
@@ -299,7 +299,7 @@ ynh_use_logrotate
 
 #yunohost service add $app --log "/var/log/$app/$app.log"
 # if using yunohost version 3.2 or more in the 'manifest.json', a description can be added
-#yunohost service add $app --description "$app daemon for XXX" --log "/var/log/$app/$app.log"
+yunohost service add $app --description "$app daemon for Wiki.js" --log "/var/log/$app/$app.log"
 
 #=================================================
 # SETUP SSOWAT
@@ -315,5 +315,5 @@ fi
 #=================================================
 # RELOAD NGINX
 #=================================================
-
+systemctl start $app
 systemctl reload nginx
