@@ -174,13 +174,13 @@ ynh_system_user_create $app
 
 pushd $final_path
 ynh_use_nodejs
-npm install "graphql@^0.13.1"
-npm install "acorn@^6.0.0"
-npm install "babel-core@>=6.0.20"
-npm install "eslint@>=5.0.0"
-npm install
-npm audit fix
-npm run build
+sudo -u $app $nodejs_path/npm install "graphql@^0.13.1"
+sudo -u $app $nodejs_path/npm install "acorn@^6.0.0"
+sudo -u $app $nodejs_path/npm install "babel-core@>=6.0.20"
+sudo -u $app $nodejs_path/npm install "eslint@>=5.0.0"
+sudo -u $app $nodejs_path/npm install
+sudo -u $app $nodejs_path/npm audit fix
+sudo -u $app $nodejs_path/npm run build
 popd
 
 
