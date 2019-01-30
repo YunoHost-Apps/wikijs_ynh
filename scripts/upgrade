@@ -17,10 +17,10 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get $app domain)
 path_url=$(ynh_app_setting_get $app path)
-admin=$(ynh_app_setting_get $app admin)
+#admin=$(ynh_app_setting_get $app admin)
 is_public=$(ynh_app_setting_get $app is_public)
 final_path=$(ynh_app_setting_get $app final_path)
-language=$(ynh_app_setting_get $app language)
+#language=$(ynh_app_setting_get $app language)
 db_name=$(ynh_app_setting_get $app db_name)
 port=$(ynh_app_setting_get $app port)
 
