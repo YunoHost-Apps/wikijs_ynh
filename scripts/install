@@ -96,7 +96,7 @@ ynh_app_setting_set $app port $port
 ###		- As well as the section "REINSTALL DEPENDENCIES" in the restore script
 ###		- And the section "UPGRADE DEPENDENCIES" in the upgrade script
 
-ynh_install_app_dependencies redis-server
+ynh_install_app_dependencies redis-server postgresql postgresql-contrib
 ynh_install_nodejs 10
 
 #=================================================

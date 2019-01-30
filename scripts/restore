@@ -91,7 +91,7 @@ chown -R $app: $final_path
 #=================================================
 
 # Define and install dependencies
-ynh_install_app_dependencies redis-server
+ynh_install_app_dependencies redis-server postgresql postgresql-contrib
 ynh_install_nodejs 10
 
 #=================================================
