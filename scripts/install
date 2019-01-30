@@ -176,14 +176,13 @@ chown -R $app: $final_path
 
 pushd $final_path
 ynh_use_nodejs
-sudo env PATH=$PATH:$nodejs_path npm -u $app
-sudo env PATH=$PATH:$nodejs_path npm install "graphql@^0.13.1" -u $app
-sudo env PATH=$PATH:$nodejs_path npm install "acorn@^6.0.0" -u $app
-sudo env PATH=$PATH:$nodejs_path npm install "babel-core@>=6.0.20" -u $app
-sudo env PATH=$PATH:$nodejs_path npm install "eslint@>=5.0.0" -u $app
-sudo env PATH=$PATH:$nodejs_path npm install -u $app
-sudo env PATH=$PATH:$nodejs_path npm audit fix -u $app
-sudo env PATH=$PATH:$nodejs_path npm run build -u $app
+sudo -u $app env PATH=$PATH:$nodejs_path npm install "graphql@^0.13.1"
+sudo -u $app env PATH=$PATH:$nodejs_path npm install "acorn@^6.0.0"
+sudo -u $app env PATH=$PATH:$nodejs_path npm install "babel-core@>=6.0.20"
+sudo -u $app env PATH=$PATH:$nodejs_path npm install "eslint@>=5.0.0"
+sudo -u $app env PATH=$PATH:$nodejs_path npm install
+sudo -u $app env PATH=$PATH:$nodejs_path npm audit fix
+sudo -u $app env PATH=$PATH:$nodejs_path npm run build
 popd
 
 
