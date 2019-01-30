@@ -42,6 +42,13 @@ fi
 #ynh_remove_systemd_config
 
 #=================================================
+# REMOVE THE POSTGRESQL DATABASE
+#=================================================
+
+# Remove a database if it exists, along with the associated user
+ynh_psql_remove_db "$db_name" "$db_name"
+
+#=================================================
 # REMOVE DEPENDENCIES
 #=================================================
 
@@ -49,13 +56,6 @@ fi
 ynh_remove_app_dependencies
 ynh_use_nodejs
 ynh_remove_nodejs
-
-#=================================================
-# REMOVE THE POSTGRESQL DATABASE
-#=================================================
-
-# Remove a database if it exists, along with the associated user
-ynh_psql_remove_db "$db_name" "$db_name"
 
 #=================================================
 # REMOVE APP MAIN DIR
