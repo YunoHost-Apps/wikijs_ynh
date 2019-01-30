@@ -61,6 +61,10 @@ ynh_remove_nodejs
 # REMOVE APP MAIN DIR
 #=================================================
 
+# remove tmp files
+sudo -u $app rm -rf /tmp/*
+ynh_secure_remove "/var/tmp/*"
+
 # Remove the app directory securely
 ynh_secure_remove "$final_path"
 
