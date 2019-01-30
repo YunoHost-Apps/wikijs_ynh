@@ -1,12 +1,4 @@
-# Usage of this package (REMOVE THIS SECTION BEFORE RELEASE)
-- [X] Copy this app before working on it.
-- [X] Edit `conf/nginx.conf` file to match application prerequisites.
-- [ ] Edit `manifest.json` with application specific information.
-- [ ] Edit the `install`, `upgrade`, `remove`, `backup`, and `restore` scripts.
-- [X] Add a `LICENSE` file for the package.
-- [X] Edit `README.md`.
-
-# Example app for YunoHost
+# Wiki.js app for YunoHost
 
 [![Integration level](https://dash.yunohost.org/integration/wikijs.svg)](https://dash.yunohost.org/appci/app/wikijs)  
 [![Install wikijs with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=wikijs)
