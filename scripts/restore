@@ -60,7 +60,6 @@ ynh_restore_file "$final_path"
 
 ynh_install_app_dependencies postgresql postgresql-contrib
 ynh_psql_test_if_first_run
-ynh_psql_create_user "$db_name" "$db_pwd"
 ynh_psql_create_db "$db_name" "$db_name" "$db_pwd"
 ynh_psql_execute_file_as_root ./db.sql "$db_name"
 
@@ -100,6 +99,7 @@ ynh_install_nodejs 10
 
 ynh_restore_file "/etc/systemd/system/$app.service"
 systemctl enable $app.service
+systemctl start $app
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
@@ -111,7 +111,7 @@ yunohost service add $app --description "$app daemon for Wiki.js" --log "/var/lo
 # RESTORE THE CRON FILE
 #=================================================
 
-ynh_restore_file "/etc/cron.d/$app"
+#ynh_restore_file "/etc/cron.d/$app"
 
 #=================================================
 # RESTORE THE LOGROTATE CONFIGURATION
