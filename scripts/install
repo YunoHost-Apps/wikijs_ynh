@@ -174,7 +174,7 @@ ynh_system_user_create $app
 
 chown -R $app: $final_path
 pushd $final_path
-ynh_use_nodejs
+sudo -u "$app" ynh_use_nodejs
 sudo -u "$app" npm install "graphql@^0.13.1"
 sudo -u "$app" npm install "acorn@^6.0.0"
 sudo -u "$app" npm install "babel-core@>=6.0.20"
