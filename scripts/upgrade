@@ -76,7 +76,7 @@ path_url=$(ynh_normalize_url_path $path_url)
 #=================================================
 
 # Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source "$final_path"
+#ynh_setup_source "$final_path"
 ( cd $final_path && git pull )
 
 #=================================================
@@ -112,6 +112,17 @@ ynh_system_user_create $app
 #=================================================
 # ...
 #=================================================
+
+pushd $final_path
+ynh_use_nodejs
+npm install "graphql@^0.13.1"
+npm install "acorn@^6.0.0"
+npm install "babel-core@>=6.0.20"
+npm install "eslint@>=5.0.0"
+npm install
+npm audit fix
+npm run build
+popd
 
 ### Verify the checksum of a file, stored by `ynh_store_file_checksum` in the install script.
 ### And create a backup of this file if the checksum is different. So the file will be backed up if the admin had modified it.
