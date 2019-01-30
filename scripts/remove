@@ -39,7 +39,7 @@ fi
 #=================================================
 
 # Remove the dedicated systemd config
-#ynh_remove_systemd_config
+ynh_remove_systemd_config
 
 #=================================================
 # REMOVE THE POSTGRESQL DATABASE

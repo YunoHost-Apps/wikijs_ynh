@@ -131,7 +131,8 @@ ynh_use_logrotate --non-append
 #=================================================
 
 # Create a dedicated systemd config
-#ynh_add_systemd_config
+ynh_replace_string "__NODEJS_PATH__" "$nodejs_path" "../conf/systemd.service"
+ynh_add_systemd_config
 
 #=================================================
 # GENERIC FINALIZATION

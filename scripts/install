@@ -173,6 +173,14 @@ ynh_system_user_create $app
 #=================================================
 
 pushd $final_path
+ynh_use_nodejs
+npm install graphql@^0.13.1
+npm install acorn@^6.0.0
+npm install babel-core@>=6.0.20
+npm install eslint@>=5.0.0
+npm install
+npm audit fix
+npm run build
 popd
 
 
@@ -192,7 +200,8 @@ popd
 ###		- And the section "SETUP SYSTEMD" in the upgrade script
 
 # Create a dedicated systemd config
-#ynh_add_systemd_config
+ynh_replace_string "__NODEJS_PATH__" "$nodejs_path" "../conf/systemd.service"
+ynh_add_systemd_config
 
 #=================================================
 # SETUP APPLICATION WITH CURL

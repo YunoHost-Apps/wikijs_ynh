@@ -68,7 +68,7 @@ ynh_backup "/etc/logrotate.d/$app"
 # BACKUP SYSTEMD
 #=================================================
 
-#ynh_backup "/etc/systemd/system/$app.service"
+ynh_backup "/etc/systemd/system/$app.service"
 
 #=================================================
 # BACKUP A CRON FILE
