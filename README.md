@@ -17,7 +17,7 @@ If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to
 ## Overview
 An open source, modern and powerful wiki app built on Node.js, Git and Markdown for YunoHost.
 
-**Wiki.js is still under development, all features not already implemented.**
+<span style="color:red">**Wiki.js is still under development, all features not already implemented.**</span>
 
 **Shipped version:** 2.0.0-beta.11
 
