@@ -172,15 +172,18 @@ ynh_system_user_create $app
 # ...
 #=================================================
 
+chown -R $app: $final_path
+
 pushd $final_path
 ynh_use_nodejs
-$nodejs_path/npm install "graphql@^0.13.1"
-$nodejs_path/npm install "acorn@^6.0.0"
-$nodejs_path/npm install "babel-core@>=6.0.20"
-$nodejs_path/npm install "eslint@>=5.0.0"
-$nodejs_path/npm install
-$nodejs_path/npm audit fix
-$nodejs_path/npm run build
+sudo env PATH=$PATH:$nodejs_path  -u $app npm
+sudo env PATH=$PATH:$nodejs_path  -u $app npm install "graphql@^0.13.1"
+sudo env PATH=$PATH:$nodejs_path  -u $app npm install "acorn@^6.0.0"
+sudo env PATH=$PATH:$nodejs_path  -u $app npm install "babel-core@>=6.0.20"
+sudo env PATH=$PATH:$nodejs_path  -u $app npm install "eslint@>=5.0.0"
+sudo env PATH=$PATH:$nodejs_path  -u $app npm install
+sudo env PATH=$PATH:$nodejs_path  -u $app npm audit fix
+sudo env PATH=$PATH:$nodejs_path  -u $app npm run build
 popd
 
 
