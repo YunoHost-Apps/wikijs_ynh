@@ -41,8 +41,8 @@ Can the app be used by multiple users?
 * x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/wikijs%20%28Community%29.svg)](https://ci-apps.yunohost.org/ci/apps/wikijs/)
 * ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/wikijs%20%28Community%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/wikijs/)
 * Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/wikijs%20%28Community%29.svg)](https://ci-stretch.nohost.me/ci/apps/wikijs/)
-* Testing x86-64b - [![Build Status](https://ci-apps-testing.yunohost.org/ci/logs/wikijs%20%28Community%29.svg)](https://ci-apps-testing.yunohost.org/ci/apps/wikijs/)
-* Unstable x86-64b - [![Build Status](https://ci-apps-unstable.yunohost.org/ci/logs/wikijs%20%28Community%29.svg)](https://ci-apps-unstable.yunohost.org/ci/apps/wikijs/)
+* Testing x86-64b - [![Build Status](https://ci-apps-unstable.yunohost.org/ci/logs/wikijs%20%28Community%29%20%28testing%29.svg)](https://ci-apps-unstable.yunohost.org/ci/apps/wikijs/)
+* Unstable x86-64b - [![Build Status](https://ci-apps-unstable.yunohost.org/ci/logs/wikijs%20%28Community%29%20%28unstable%29.svg)](https://ci-apps-unstable.yunohost.org/ci/apps/wikijs/)
 
 ## Limitations
 
