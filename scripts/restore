@@ -101,6 +101,7 @@ ynh_install_nodejs 10
 
 ynh_restore_file "/etc/systemd/system/$app.service"
 systemctl enable $app.service
+systemctl daemon-reload
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
@@ -128,6 +129,13 @@ ynh_restore_file "/etc/logrotate.d/$app"
 
 #systemctl reload php5-fpm
 systemctl reload nginx
+
+#=================================================
+# CREATE LOG FOLDER
+#=================================================
+
+mkdir -p "/var/log/$app"
+chown -R "$app":"$app" "/var/log/$app"
 
 #=================================================
 # START SERVICE

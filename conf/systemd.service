@@ -7,7 +7,7 @@ Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__FINALPATH__/
-ExecStart=__NODEJS_PATH__/node   __FINALPATH__/server >> /var/log/__APP__/__APP__.log 2>&1
+ExecStart=/bin/sh -c '__NODEJS_PATH__/node   __FINALPATH__/server >> /var/log/__APP__/__APP__.log 2>&1'
 
 [Install]
 WantedBy=multi-user.target
