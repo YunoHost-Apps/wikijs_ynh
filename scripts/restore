@@ -69,14 +69,14 @@ ynh_psql_execute_file_as_root ./db.sql "$db_name"
 #=================================================
 
 # Create the dedicated user (if not existing)
-ynh_system_user_create $app
+ynh_system_user_create "$app" "$final_path"
 
 #=================================================
 # RESTORE USER RIGHTS
 #=================================================
 
 # Restore permissions on app files
-chown -R $app: $final_path
+chown -R "$app":"$app" "$final_path"
 
 #=================================================
 # RESTORE THE PHP-FPM CONFIGURATION
