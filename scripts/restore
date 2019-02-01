@@ -7,6 +7,7 @@
 #=================================================
 
 source ../settings/scripts/_common.sh
+source ../settings/scripts/ynh_systemd_action
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -15,7 +16,7 @@ source /usr/share/yunohost/helpers
 
 ynh_clean_setup () {
 	#### Remove this function if there's nothing to clean before calling the remove script.
-	true
+	ynh_clean_check_starting
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
@@ -100,7 +101,6 @@ ynh_install_nodejs 10
 
 ynh_restore_file "/etc/systemd/system/$app.service"
 systemctl enable $app.service
-systemctl start $app
 
 #=================================================
 # ADVERTISE SERVICE IN ADMIN PANEL
@@ -128,4 +128,9 @@ ynh_restore_file "/etc/logrotate.d/$app"
 
 #systemctl reload php5-fpm
 systemctl reload nginx
-sleep 30
+
+#=================================================
+# START SERVICE
+#=================================================
+
+ynh_systemd_action --action=start --service_name=$app

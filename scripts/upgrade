@@ -7,6 +7,7 @@
 #=================================================
 
 source _common.sh
+source ynh_systemd_action
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -58,9 +59,16 @@ ynh_backup_before_upgrade
 ynh_clean_setup () {
 	# restore it if the upgrade fails
 	ynh_restore_upgradebackup
+	ynh_clean_check_starting
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
+
+#=================================================
+# STOP SERVICE
+#=================================================
+
+ynh_systemd_action --action=stop --service_name=$app
 
 #=================================================
 # CHECK THE PATH
@@ -172,4 +180,9 @@ fi
 #=================================================
 
 systemctl reload nginx
-sleep 30
+
+#=================================================
+# START SERVICE
+#=================================================
+
+ynh_systemd_action --action=start --service_name=$app
