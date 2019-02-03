@@ -336,4 +336,4 @@ systemctl reload nginx
 # START SERVICE
 #=================================================
 
-ynh_systemd_action --action=start --service_name=$app
+ynh_systemd_action --action=start --service_name=$app --line_match="complete setup"
