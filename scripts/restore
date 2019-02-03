@@ -141,4 +141,4 @@ chown -R "$app":"$app" "/var/log/$app"
 # START SERVICE
 #=================================================
 
-ynh_systemd_action --action=start --service_name=$app
+ynh_systemd_action --action=start --service_name=$app --line_match="Browse to http://localhost:"
