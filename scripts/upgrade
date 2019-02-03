@@ -87,7 +87,7 @@ path_url=$(ynh_normalize_url_path $path_url)
 #ynh_setup_source "$final_path"
 
 pushd $final_path
-	git pull --force
+	git pull
 	git checkout "tags/2.0.0-beta.13"
 popd
 
