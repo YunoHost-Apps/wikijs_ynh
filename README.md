@@ -11,7 +11,7 @@ An open source, modern and powerful wiki app built on Node.js, Git and Markdown 
 
 **Wiki.js is still under development, all features not already implemented.**
 
-**Shipped version:** 2.0.0-beta.17
+**Shipped version:** 2.0.0-beta.13
 
 ## Licence
 
