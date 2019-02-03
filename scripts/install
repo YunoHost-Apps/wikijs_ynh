@@ -196,7 +196,7 @@ pushd $final_path
 	sudo -u $app env PATH=$PATH:$nodejs_path npm install "eslint@>=5.0.0" --save
     sudo -u $app env PATH=$PATH:$nodejs_path npm install
 	sudo -u $app env PATH=$PATH:$nodejs_path npm audit fix
-    #sudo -u $app env PATH=$PATH:$nodejs_path npm run build
+    sudo -u $app env PATH=$PATH:$nodejs_path npm run build
 popd
 
 
