@@ -335,4 +335,4 @@ systemctl reload nginx
 # START SERVICE
 #=================================================
 
-ynh_systemd_action --action=start --service_name=$app --line_match="complete setup"
+ynh_systemd_action --action=start --service_name=$app --line_match="Redis connection:"
