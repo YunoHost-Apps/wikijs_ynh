@@ -125,8 +125,8 @@ chown -R "$app":"$app" "$final_path"
 
 pushd $final_path
     ynh_use_nodejs
-    sudo -u $app env PATH=$PATH:$nodejs_path npm update --production
-    sudo -u $app env PATH=$PATH:$nodejs_path npm install --production
+    sudo -u $app env PATH=$PATH:$nodejs_path npm update
+    sudo -u $app env PATH=$PATH:$nodejs_path npm install
     sudo -u $app env PATH=$PATH:$nodejs_path npm audit fix
     sudo -u $app env PATH=$PATH:$nodejs_path npm run build
 popd
