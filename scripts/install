@@ -97,13 +97,12 @@ ynh_app_setting_set $app port $port
 ###		- As well as the section "REINSTALL DEPENDENCIES" in the restore script
 ###		- And the section "UPGRADE DEPENDENCIES" in the upgrade script
 
-ynh_install_nodejs 10
-
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 
-ynh_install_app_dependencies redis-server postgresql postgresql-contrib yarn
+ynh_install_nodejs 10
 
+ynh_install_app_dependencies redis-server postgresql postgresql-contrib yarn
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
@@ -336,4 +335,4 @@ systemctl reload nginx
 # START SERVICE
 #=================================================
 
-ynh_systemd_action --action=start --service_name=$app --line_match="Browse to http://localhost:"
+ynh_systemd_action --action=start --service_name=$app

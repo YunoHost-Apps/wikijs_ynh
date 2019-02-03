@@ -102,10 +102,10 @@ ynh_add_nginx_config
 # UPGRADE DEPENDENCIES
 #=================================================
 
-ynh_install_nodejs 10
-
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+
+ynh_install_nodejs 10
 
 ynh_install_app_dependencies redis-server postgresql postgresql-contrib yarn
 
@@ -203,4 +203,4 @@ systemctl reload nginx
 # START SERVICE
 #=================================================
 
-ynh_systemd_action --action=start --service_name=$app --line_match="Browse to http://localhost:"
+ynh_systemd_action --action=start --service_name=$app
