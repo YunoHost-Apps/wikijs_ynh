@@ -93,9 +93,12 @@ chown -R "$app":"$app" "$final_path"
 
 # Define and install dependencies
 
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+
 ynh_install_nodejs 10
 
-ynh_install_app_dependencies redis-server postgresql postgresql-contrib
+ynh_install_app_dependencies redis-server postgresql postgresql-contrib yarn
 
 #=================================================
 # RESTORE SYSTEMD
