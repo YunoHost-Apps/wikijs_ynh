@@ -136,7 +136,7 @@ ynh_app_setting_set $app final_path $final_path
 git clone https://github.com/Requarks/wiki "$final_path"
 
 pushd $final_path
-	git checkout tags/2.0.0-beta.15
+	git checkout tags/2.0.0-beta.11
 popd
 
 #=================================================
@@ -190,7 +190,11 @@ chown -R "$app":"$app" "$final_path"
 
 pushd $final_path
     ynh_use_nodejs
+	sudo -u $app env PATH=$PATH:$nodejs_path npm install "acorn@^6.0.0" --save
+	sudo -u $app env PATH=$PATH:$nodejs_path npm install "babel-core@>=6.0.20" --save
+	sudo -u $app env PATH=$PATH:$nodejs_path npm install "graphql@^0.13.0" --save
     sudo -u $app env PATH=$PATH:$nodejs_path npm install
+	sudo -u $app env PATH=$PATH:$nodejs_path npm audit fix
     sudo -u $app env PATH=$PATH:$nodejs_path npm run build
 popd
 
