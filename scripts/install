@@ -16,6 +16,7 @@ source /usr/share/yunohost/helpers
 
 ynh_clean_setup () {
 	### Remove this function if there's nothing to clean before calling the remove script.
+	read -p "Press any key..."
 	ynh_clean_check_starting
 }
 # Exit if an error occurs during the execution of the script
@@ -97,12 +98,9 @@ ynh_app_setting_set $app port $port
 ###		- As well as the section "REINSTALL DEPENDENCIES" in the restore script
 ###		- And the section "UPGRADE DEPENDENCIES" in the upgrade script
 
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-
 ynh_install_nodejs 10
 
-ynh_install_app_dependencies redis-server postgresql postgresql-contrib yarn
+ynh_install_app_dependencies redis-server postgresql postgresql-contrib
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
@@ -192,7 +190,7 @@ chown -R "$app":"$app" "$final_path"
 
 pushd $final_path
     ynh_use_nodejs
-    sudo -u $app env PATH=$PATH:$nodejs_path yarn install
+    sudo -u $app env PATH=$PATH:$nodejs_path npm install
     sudo -u $app env PATH=$PATH:$nodejs_path npm run build
 popd
 

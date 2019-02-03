@@ -102,12 +102,9 @@ ynh_add_nginx_config
 # UPGRADE DEPENDENCIES
 #=================================================
 
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-
 ynh_install_nodejs 10
 
-ynh_install_app_dependencies redis-server postgresql postgresql-contrib yarn
+ynh_install_app_dependencies redis-server postgresql postgresql-contrib
 
 #=================================================
 # CREATE DEDICATED USER
@@ -133,7 +130,7 @@ chown -R "$app":"$app" "$final_path"
 
 pushd $final_path
     ynh_use_nodejs
-    sudo -u $app env PATH=$PATH:$nodejs_path yarn install
+    sudo -u $app env PATH=$PATH:$nodejs_path npm install
     sudo -u $app env PATH=$PATH:$nodejs_path npm run build
 popd
 
