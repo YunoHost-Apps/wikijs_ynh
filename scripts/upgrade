@@ -85,7 +85,11 @@ path_url=$(ynh_normalize_url_path $path_url)
 
 # Download, check integrity, uncompress and patch the source from app.src
 #ynh_setup_source "$final_path"
-( cd $final_path && git pull )
+
+pushd $final_path
+	git pull
+	git checkout 2.0.0-beta.17
+popd
 
 #=================================================
 # NGINX CONFIGURATION
@@ -125,11 +129,26 @@ chown -R "$app":"$app" "$final_path"
 
 pushd $final_path
     ynh_use_nodejs
-    sudo -u $app env PATH=$PATH:$nodejs_path npm update
-    sudo -u $app env PATH=$PATH:$nodejs_path npm install
+    sudo -u $app env PATH=$PATH:$nodejs_path npm update --production
+    sudo -u $app env PATH=$PATH:$nodejs_path npm install --production
     sudo -u $app env PATH=$PATH:$nodejs_path npm audit fix
     sudo -u $app env PATH=$PATH:$nodejs_path npm run build
 popd
+
+
+#=================================================
+# MODIFY A CONFIG FILE
+#=================================================
+
+cp -f ../conf/config.sample.yml "$final_path/config.yml"
+
+### `ynh_replace_string` is used to replace a string in a file.
+### (It's compatible with sed regular expressions syntax)
+
+#ynh_replace_string "match_string" "replace_string" "$final_path/config.yml"
+ynh_replace_string "__PORT__" "$port" "$final_path/config.yml"
+ynh_replace_string "__DB_PWD__" "$db_pwd" "$final_path/config.yml"
+ynh_replace_string "__DB_NAME__" "$db_name" "$final_path/config.yml"
 
 ### Verify the checksum of a file, stored by `ynh_store_file_checksum` in the install script.
 ### And create a backup of this file if the checksum is different. So the file will be backed up if the admin had modified it.
