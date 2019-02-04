@@ -21,7 +21,7 @@ An open source, modern and powerful wiki app built on Node.js, Git and Markdown 
 
 ## License
 
-**LICENCE:** AGPL-3.0-or-later
+**LICENSE:** AGPL-3.0-or-later
 
 ## Demo
 
