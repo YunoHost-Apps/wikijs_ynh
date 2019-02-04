@@ -7,6 +7,7 @@
 #=================================================
 
 source _common.sh
+source ynh_systemd_action
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -15,7 +16,7 @@ source /usr/share/yunohost/helpers
 
 ynh_clean_setup () {
 	### Remove this function if there's nothing to clean before calling the remove script.
-	true
+	ynh_clean_check_starting
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
@@ -96,8 +97,12 @@ ynh_app_setting_set $app port $port
 ###		- As well as the section "REINSTALL DEPENDENCIES" in the restore script
 ###		- And the section "UPGRADE DEPENDENCIES" in the upgrade script
 
-ynh_install_app_dependencies redis-server postgresql postgresql-contrib
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+
 ynh_install_nodejs 10
+
+ynh_install_app_dependencies redis-server postgresql postgresql-contrib yarn
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
@@ -131,6 +136,10 @@ ynh_app_setting_set $app final_path $final_path
 # Download, check integrity, uncompress and patch the source from app.src
 #ynh_setup_source "$final_path"
 git clone https://github.com/Requarks/wiki "$final_path"
+
+pushd $final_path
+	git checkout "tags/2.0.0-beta.13" --quiet
+popd
 
 #=================================================
 # NGINX CONFIGURATION
@@ -169,20 +178,22 @@ ynh_system_user_create "$app" "$final_path"
 #=================================================
 # SPECIFIC SETUP
 #=================================================
-# ...
+# CREATE LOG FOLDER
+#=================================================
+
+mkdir -p "/var/log/$app"
+chown -R "$app":"$app" "/var/log/$app"
+
+#=================================================
+# MAKE SETUP
 #=================================================
 
 chown -R "$app":"$app" "$final_path"
 
 pushd $final_path
-ynh_use_nodejs
-sudo -u $app env PATH=$PATH:$nodejs_path npm install "graphql@^0.13.1"
-sudo -u $app env PATH=$PATH:$nodejs_path npm install "acorn@^6.0.0"
-sudo -u $app env PATH=$PATH:$nodejs_path npm install "babel-core@>=6.0.20"
-sudo -u $app env PATH=$PATH:$nodejs_path npm install "eslint@>=5.0.0"
-sudo -u $app env PATH=$PATH:$nodejs_path npm install
-sudo -u $app env PATH=$PATH:$nodejs_path npm audit fix
-sudo -u $app env PATH=$PATH:$nodejs_path npm run build
+    ynh_use_nodejs
+	sudo -u $app env PATH=$PATH:$nodejs_path yarn install
+    sudo -u $app env PATH=$PATH:$nodejs_path npm run build
 popd
 
 
@@ -317,6 +328,11 @@ fi
 #=================================================
 # RELOAD NGINX
 #=================================================
-systemctl start $app
+
 systemctl reload nginx
-sleep 30
+
+#=================================================
+# START SERVICE
+#=================================================
+
+ynh_systemd_action --action=start --service_name=$app --line_match="Redis connection:"

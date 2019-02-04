@@ -1,4 +1,4 @@
-SOURCE_URL=https://github.com/Requarks/wiki/releases/download/2.0.0-beta.11/wiki-js.tar.gz
+SOURCE_URL=url of app's source
 SOURCE_SUM=sha256 checksum
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
