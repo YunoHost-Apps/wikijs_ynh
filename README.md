@@ -27,10 +27,6 @@ An open source, modern and powerful wiki app built on Node.js, Git and Markdown 
 
 * [Official demo](https://docs-beta.requarks.io/)
 
-## Configuration
-
-How to configure this app: by an admin panel, a plain file with SSH, or any other way.
-
 ## Documentation
 
  * Official documentation: https://docs-beta.requarks.io/
@@ -39,16 +35,14 @@ How to configure this app: by an admin panel, a plain file with SSH, or any othe
 
 #### Multi-users support
 
-Are LDAP and HTTP auth supported?
-Can the app be used by multiple users?
+No LDAP and HTTP auth for now but planned to be supported.
+The app can be used by multiple users?
 
 #### Supported architectures
 
 * x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/wikijs%20%28Community%29.svg)](https://ci-apps.yunohost.org/ci/apps/wikijs/)
 * ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/wikijs%20%28Community%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/wikijs/)
 * Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/wikijs%20%28Community%29.svg)](https://ci-stretch.nohost.me/ci/apps/wikijs/)
-* Testing x86-64b - [![Build Status](https://ci-apps-unstable.yunohost.org/ci/logs/wikijs%20%28Community%29%20%28testing%29.svg)](https://ci-apps-unstable.yunohost.org/ci/apps/wikijs/)
-* Unstable x86-64b - [![Build Status](https://ci-apps-unstable.yunohost.org/ci/logs/wikijs%20%28Community%29%20%28unstable%29.svg)](https://ci-apps-unstable.yunohost.org/ci/apps/wikijs/)
 
 ## Limitations
 
