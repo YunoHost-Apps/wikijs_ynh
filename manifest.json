@@ -10,8 +10,7 @@
     "url": "https://wiki.js.org/",
     "license": "AGPL-3.0-or-later",
     "maintainer": {
-        "name": "yalh",
-        "email": "yalh@yahoo.com"
+        "name": "yalh76"
     },
     "requirements": {
         "yunohost": ">= 2.7.14"
