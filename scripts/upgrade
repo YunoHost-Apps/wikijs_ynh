@@ -93,7 +93,7 @@ ynh_print_info "Download, check and unpack source"
 
 pushd $final_path
 	git fetch origin
-	git checkout "tags/2.0.0-beta.13" --quiet
+	git checkout "tags/2.0.0-beta.33" --quiet
 popd
 
 #=================================================
