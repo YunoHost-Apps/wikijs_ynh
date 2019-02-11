@@ -140,7 +140,7 @@ pushd $final_path
 	sudo -u $app env PATH=$PATH yarn cache clean
 	sudo -u $app env PATH=$PATH yarn --frozen-lockfile --non-interactive
 	sudo -u $app env PATH=$PATH yarn build
-	sudo -u $app env PATH=$PATH ynh_secure_remove $final_path/node_modules
+	sudo -u $app ynh_secure_remove $final_path/node_modules
 	sudo -u $app env PATH=$PATH yarn --production --frozen-lockfile --non-interactive
 popd
 
