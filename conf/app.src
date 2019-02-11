@@ -1,5 +1,5 @@
-SOURCE_URL=url of app's source
-SOURCE_SUM=sha256 checksum
+SOURCE_URL=https://github.com/Requarks/wiki/archive/2.0.0-beta.33.tar.gz
+SOURCE_SUM=66115e8ae174083eaaec83d1c7f6e026fa97ee53d664e6f1505ebe22b0dfe7f2
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true

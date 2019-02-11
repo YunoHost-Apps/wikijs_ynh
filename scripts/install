@@ -106,13 +106,12 @@ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/source
 
 ynh_install_nodejs 10
 
-ynh_install_app_dependencies redis-server postgresql postgresql-contrib yarn
+ynh_install_app_dependencies yarn redis-server postgresql postgresql-contrib build-essential
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
 #=================================================
 ynh_print_info "Creating a postgresql database ..."
-
 
 ### Use these lines if you need a database for the application.
 ### `ynh_mysql_setup_db` will create a database, an associated user and a ramdom password.
@@ -141,12 +140,7 @@ ynh_print_info "Setting up source files ..."
 
 ynh_app_setting_set $app final_path $final_path
 # Download, check integrity, uncompress and patch the source from app.src
-#ynh_setup_source "$final_path"
-git clone https://github.com/Requarks/wiki "$final_path"
-
-pushd $final_path
-	git checkout "tags/2.0.0-beta.33" --quiet
-popd
+ynh_setup_source "$final_path"
 
 #=================================================
 # NGINX CONFIGURATION
