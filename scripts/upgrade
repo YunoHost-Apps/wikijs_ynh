@@ -137,10 +137,12 @@ chown -R "$app":"$app" "$final_path"
 
 pushd $final_path
     ynh_use_nodejs
-    sudo -u $app env PATH=$PATH:$nodejs_path yarn install
-    sudo -u $app env PATH=$PATH:$nodejs_path npm run build
+	sudo -u $app env PATH=$PATH yarn cache clean
+	sudo -u $app env PATH=$PATH yarn --frozen-lockfile --non-interactive
+	sudo -u $app env PATH=$PATH yarn build
+	sudo -u $app env PATH=$PATH ynh_secure_remove $final_path/node_modules
+	sudo -u $app env PATH=$PATH yarn --production --frozen-lockfile --non-interactive
 popd
-
 
 #=================================================
 # MODIFY A CONFIG FILE
