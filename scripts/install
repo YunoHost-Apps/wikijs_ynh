@@ -16,6 +16,7 @@ source /usr/share/yunohost/helpers
 
 ynh_clean_setup () {
 	### Remove this function if there's nothing to clean before calling the remove script.
+	read -p "Press any key..."
 	ynh_clean_check_starting
 }
 # Exit if an error occurs during the execution of the script
@@ -106,13 +107,12 @@ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/source
 
 ynh_install_nodejs 10
 
-ynh_install_app_dependencies redis-server postgresql postgresql-contrib yarn
+ynh_install_app_dependencies yarn redis-server postgresql postgresql-contrib build-essential
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
 #=================================================
 ynh_print_info "Creating a postgresql database ..."
-
 
 ### Use these lines if you need a database for the application.
 ### `ynh_mysql_setup_db` will create a database, an associated user and a ramdom password.
@@ -141,12 +141,7 @@ ynh_print_info "Setting up source files ..."
 
 ynh_app_setting_set $app final_path $final_path
 # Download, check integrity, uncompress and patch the source from app.src
-#ynh_setup_source "$final_path"
-git clone https://github.com/Requarks/wiki "$final_path"
-
-pushd $final_path
-	git checkout "tags/2.0.0-beta.13" --quiet
-popd
+ynh_setup_source "$final_path"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -195,6 +190,13 @@ mkdir -p "/var/log/$app"
 chown -R "$app":"$app" "/var/log/$app"
 
 #=================================================
+# PATCH fs.readdirAsync error
+#=================================================
+
+ynh_replace_string "fs.readdirAsync" "fs.readdirSync" "$final_path/server/db/migrator-source.js"
+ynh_replace_string "fs.readdirAsync" "fs.readdirSync" "$final_path/server/jobs/purge-uploads.js"
+
+#=================================================
 # MAKE SETUP
 #=================================================
 
@@ -202,8 +204,11 @@ chown -R "$app":"$app" "$final_path"
 
 pushd $final_path
     ynh_use_nodejs
-	sudo -u $app env PATH=$PATH:$nodejs_path yarn install
-    sudo -u $app env PATH=$PATH:$nodejs_path npm run build
+	sudo -u $app env PATH=$PATH yarn cache clean
+	sudo -u $app env PATH=$PATH yarn --frozen-lockfile --non-interactive
+	sudo -u $app env PATH=$PATH yarn build
+	ynh_secure_remove $final_path/node_modules
+	sudo -u $app env PATH=$PATH yarn --production --frozen-lockfile --non-interactive
 popd
 
 #=================================================

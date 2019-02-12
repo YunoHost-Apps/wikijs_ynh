@@ -93,7 +93,7 @@ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/source
 
 ynh_install_nodejs 10
 
-ynh_install_app_dependencies redis-server postgresql postgresql-contrib yarn
+ynh_install_app_dependencies yarn redis-server postgresql postgresql-contrib build-essential
 
 #=================================================
 # RESTORE THE POSTGRESQL DATABASE

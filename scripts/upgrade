@@ -89,12 +89,7 @@ path_url=$(ynh_normalize_url_path $path_url)
 ynh_print_info "Download, check and unpack source"
 
 # Download, check integrity, uncompress and patch the source from app.src
-#ynh_setup_source "$final_path"
-
-pushd $final_path
-	git fetch origin
-	git checkout "tags/2.0.0-beta.13" --quiet
-popd
+ynh_setup_source "$final_path"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -114,7 +109,7 @@ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/source
 
 ynh_install_nodejs 10
 
-ynh_install_app_dependencies redis-server postgresql postgresql-contrib yarn
+ynh_install_app_dependencies yarn redis-server postgresql postgresql-contrib build-essential
 
 #=================================================
 # CREATE DEDICATED USER
@@ -135,17 +130,26 @@ ynh_print_info "Reconfigure php-fpm"
 #=================================================
 # SPECIFIC UPGRADE
 #=================================================
-# SETUP
+# PATCH fs.readdirAsync error
+#=================================================
+
+ynh_replace_string "fs.readdirAsync" "fs.readdirSync" "$final_path/server/db/migrator-source.js"
+ynh_replace_string "fs.readdirAsync" "fs.readdirSync" "$final_path/server/jobs/purge-uploads.js"
+
+#=================================================
+# MAKE SETUP
 #=================================================
 
 chown -R "$app":"$app" "$final_path"
 
 pushd $final_path
     ynh_use_nodejs
-    sudo -u $app env PATH=$PATH:$nodejs_path yarn install
-    sudo -u $app env PATH=$PATH:$nodejs_path npm run build
+	sudo -u $app env PATH=$PATH yarn cache clean
+	sudo -u $app env PATH=$PATH yarn --frozen-lockfile --non-interactive
+	sudo -u $app env PATH=$PATH yarn build
+	ynh_secure_remove $final_path/node_modules
+	sudo -u $app env PATH=$PATH yarn --production --frozen-lockfile --non-interactive
 popd
-
 
 #=================================================
 # MODIFY A CONFIG FILE
