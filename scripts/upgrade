@@ -13,6 +13,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
+ynh_print_info "Load settings"
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -29,6 +30,7 @@ port=$(ynh_app_setting_get $app port)
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
+ynh_print_info "Ensure downward compatibility"
 
 # Fix is_public as a boolean value
 if [ "$is_public" = "Yes" ]; then
@@ -54,6 +56,7 @@ fi
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
+ynh_print_info "Backup the app before upgrading"
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -83,18 +86,15 @@ path_url=$(ynh_normalize_url_path $path_url)
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
+ynh_print_info "Download, check and unpack source"
 
 # Download, check integrity, uncompress and patch the source from app.src
-#ynh_setup_source "$final_path"
-
-pushd $final_path
-	git fetch origin
-	git checkout "tags/2.0.0-beta.13" --quiet
-popd
+ynh_setup_source "$final_path"
 
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
+ynh_print_info "Reconfigure nginx"
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -102,17 +102,19 @@ ynh_add_nginx_config
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
+ynh_print_info "Upgrade dependencies"
 
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 
 ynh_install_nodejs 10
 
-ynh_install_app_dependencies redis-server postgresql postgresql-contrib yarn
+ynh_install_app_dependencies yarn redis-server postgresql postgresql-contrib build-essential
 
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
+ynh_print_info "Create a dedicated user"
 
 # Create a dedicated user (if not existing)
 ynh_system_user_create "$app" "$final_path"
@@ -120,6 +122,7 @@ ynh_system_user_create "$app" "$final_path"
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
+ynh_print_info "Reconfigure php-fpm"
 
 # Create a dedicated php-fpm config
 #ynh_add_fpm_config
@@ -127,17 +130,26 @@ ynh_system_user_create "$app" "$final_path"
 #=================================================
 # SPECIFIC UPGRADE
 #=================================================
-# ...
+# PATCH fs.readdirAsync error
+#=================================================
+
+ynh_replace_string "fs.readdirAsync" "fs.readdirSync" "$final_path/server/db/migrator-source.js"
+ynh_replace_string "fs.readdirAsync" "fs.readdirSync" "$final_path/server/jobs/purge-uploads.js"
+
+#=================================================
+# MAKE SETUP
 #=================================================
 
 chown -R "$app":"$app" "$final_path"
 
 pushd $final_path
     ynh_use_nodejs
-    sudo -u $app env PATH=$PATH:$nodejs_path yarn install
-    sudo -u $app env PATH=$PATH:$nodejs_path npm run build
+	sudo -u $app env PATH=$PATH yarn cache clean
+	sudo -u $app env PATH=$PATH yarn --frozen-lockfile --non-interactive
+	sudo -u $app env PATH=$PATH yarn build
+	ynh_secure_remove $final_path/node_modules
+	sudo -u $app env PATH=$PATH yarn --production --frozen-lockfile --non-interactive
 popd
-
 
 #=================================================
 # MODIFY A CONFIG FILE
@@ -162,6 +174,7 @@ ynh_store_file_checksum "$final_path/config.yml"
 #=================================================
 # SETUP LOGROTATE
 #=================================================
+ynh_print_info "Reconfigure logrotate"
 
 # Use logrotate to manage app-specific logfile(s)
 ynh_use_logrotate --non-append
@@ -169,6 +182,7 @@ ynh_use_logrotate --non-append
 #=================================================
 # SETUP SYSTEMD
 #=================================================
+ynh_print_info "Reconfigure systemd"
 
 # Create a dedicated systemd config
 ynh_replace_string "__NODEJS_PATH__" "$nodejs_path" "../conf/systemd.service"
@@ -186,6 +200,7 @@ chown -R "$app":"$app" "$final_path"
 #=================================================
 # SETUP SSOWAT
 #=================================================
+ynh_print_info "Reconfigure SSOwat"
 
 # Make app public if necessary
 if [ $is_public -eq 1 ]
@@ -197,6 +212,7 @@ fi
 #=================================================
 # RELOAD NGINX
 #=================================================
+ynh_print_info "Reload nginx"
 
 systemctl reload nginx
 
@@ -205,3 +221,9 @@ systemctl reload nginx
 #=================================================
 
 ynh_systemd_action --action=start --service_name=$app --line_match="Redis connection:"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_print_info "Upgrade completed"
