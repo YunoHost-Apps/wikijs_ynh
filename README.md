@@ -19,10 +19,6 @@ An open source, modern and powerful wiki app built on Node.js, Git and Markdown 
 
 ![wikijs-screenshot2](https://user-images.githubusercontent.com/30271971/52230062-beb1e800-28b6-11e9-99c1-2bd04857600e.png)
 
-## License
-
-**LICENSE:** AGPL-3.0-or-later
-
 ## Demo
 
 * [Official demo](https://docs-beta.requarks.io/)
