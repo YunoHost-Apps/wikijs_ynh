@@ -128,15 +128,6 @@ ynh_print_info "Upgrading php-fpm configuration..."
 #ynh_add_fpm_config
 
 #=================================================
-# SPECIFIC UPGRADE
-#=================================================
-# PATCH fs.readdirAsync error
-#=================================================
-
-ynh_replace_string "fs.readdirAsync" "fs.readdirSync" "$final_path/server/db/migrator-source.js"
-ynh_replace_string "fs.readdirAsync" "fs.readdirSync" "$final_path/server/jobs/purge-uploads.js"
-
-#=================================================
 # MAKE SETUP
 #=================================================
 
