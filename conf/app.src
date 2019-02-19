@@ -1,5 +1,5 @@
-SOURCE_URL=https://github.com/Requarks/wiki/archive/2.0.0-beta.33.tar.gz
-SOURCE_SUM=66115e8ae174083eaaec83d1c7f6e026fa97ee53d664e6f1505ebe22b0dfe7f2
+SOURCE_URL=https://github.com/Requarks/wiki/archive/2.0.0-beta.42.tar.gz
+SOURCE_SUM=cd1669229f87630498dcbad4e2b652bcd9ce9c88a0fe0c19b55b15f98d44d6e7
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
