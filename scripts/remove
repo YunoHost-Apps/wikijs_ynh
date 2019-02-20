@@ -62,7 +62,12 @@ ynh_remove_app_dependencies
 ynh_use_nodejs
 ynh_remove_nodejs
 
-ynh_secure_remove "/etc/apt/sources.list.d/yarn.list"
+#=================================================
+# REMOVE YARN 1.13.0
+#=================================================
+ynh_print_info "Removing yarn 1.13.0..."
+
+sudo apt remove yarn
 
 #=================================================
 # REMOVE APP MAIN DIR
