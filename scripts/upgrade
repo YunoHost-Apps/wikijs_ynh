@@ -107,7 +107,7 @@ ynh_add_nginx_config
 #=================================================
 ynh_print_info "Installing yarn 1.13.0..."
 
-sudo apt install ../sources/yarn_1.13.0_all.deb
+sudo apt install -y ../sources/yarn_1.13.0_all.deb
 
 #=================================================
 # UPGRADE DEPENDENCIES
