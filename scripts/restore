@@ -91,7 +91,7 @@ ynh_print_info "Reinstalling dependencies..."
 
 ynh_install_nodejs 10
 
-ynh_install_app_dependencies redis-server postgresql postgresql-contrib build-essential
+ynh_install_app_dependencies postgresql postgresql-contrib
 
 #=================================================
 # RESTORE THE POSTGRESQL DATABASE
@@ -115,7 +115,7 @@ systemctl daemon-reload
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
-yunohost service add $app --description "$app daemon for Wiki.js" --log "/var/log/$app/$app.log"
+yunohost service add $app --description "$app daemon for Wiki.js" -t systemd
 
 #=================================================
 # RESTORE THE CRON FILE
@@ -127,7 +127,7 @@ yunohost service add $app --description "$app daemon for Wiki.js" --log "/var/lo
 # RESTORE THE LOGROTATE CONFIGURATION
 #=================================================
 
-ynh_restore_file "/etc/logrotate.d/$app"
+#ynh_restore_file "/etc/logrotate.d/$app"
 
 #=================================================
 # GENERIC FINALIZATION
@@ -138,13 +138,6 @@ ynh_print_info "Reloading nginx web server and php-fpm..."
 
 #systemctl reload php7.0-fpm
 systemctl reload nginx
-
-#=================================================
-# CREATE LOG FOLDER
-#=================================================
-
-mkdir -p "/var/log/$app"
-chown -R "$app":"$app" "/var/log/$app"
 
 #=================================================
 # START SERVICE

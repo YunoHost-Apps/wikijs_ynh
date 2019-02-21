@@ -63,13 +63,6 @@ ynh_use_nodejs
 ynh_remove_nodejs
 
 #=================================================
-# REMOVE YARN 1.13.0
-#=================================================
-ynh_print_info "Removing yarn 1.13.0..."
-
-sudo apt remove -y yarn
-
-#=================================================
 # REMOVE APP MAIN DIR
 #=================================================
 ynh_print_info "Removing app main directory"
@@ -99,7 +92,7 @@ ynh_print_info "Removing php-fpm configuration"
 ynh_print_info "Removing logrotate configuration"
 
 # Remove the app-specific logrotate config
-ynh_remove_logrotate
+#ynh_remove_logrotate
 
 #=================================================
 # CLOSE A PORT
@@ -124,7 +117,7 @@ fi
 ynh_secure_remove "/etc/$app/"
 
 # Remove the log files
-ynh_secure_remove "/var/log/$app/"
+#ynh_secure_remove "/var/log/$app/"
 
 #=================================================
 # GENERIC FINALIZATION
