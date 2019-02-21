@@ -53,6 +53,9 @@ if [ -z $final_path ]; then
 	ynh_app_setting_set $app final_path $final_path
 fi
 
+# Remove yarn repository
+ynh_secure_remove "/etc/apt/sources.list.d/yarn.list"
+
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
@@ -100,16 +103,20 @@ ynh_print_info "Upgrading nginx web server configuration..."
 ynh_add_nginx_config
 
 #=================================================
+# INSTALL YARN 1.13.0
+#=================================================
+ynh_print_info "Installing yarn 1.13.0..."
+
+sudo apt install -y ../sources/yarn_1.13.0_all.deb
+
+#=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
 ynh_print_info "Upgrading dependencies..."
 
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-
 ynh_install_nodejs 10
 
-ynh_install_app_dependencies yarn redis-server postgresql postgresql-contrib build-essential
+ynh_install_app_dependencies redis-server postgresql postgresql-contrib build-essential
 
 #=================================================
 # CREATE DEDICATED USER
