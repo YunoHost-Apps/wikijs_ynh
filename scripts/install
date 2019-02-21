@@ -199,6 +199,7 @@ ynh_print_info "Configuring a systemd service ..."
 ###		- And the section "SETUP SYSTEMD" in the upgrade script
 
 # Create a dedicated systemd config
+ynh_replace_string "__NODEJS_PATH__" "$nodejs_path" "../conf/systemd.service"
 ynh_add_systemd_config
 
 #=================================================

@@ -7,9 +7,9 @@ Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__FINALPATH__
-ExecStart=__FINALPATH__/server/index.js
+ExecStart=node__FINALPATH__/server/index.js
 Restart=always
-Environment=PATH=/usr/bin:/usr/local/bin
+Environment=PATH=/usr/bin:/usr/local/bin:__NODEJS_PATH__
 Environment=NODE_ENV=production
 
 [Install]

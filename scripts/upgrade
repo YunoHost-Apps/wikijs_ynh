@@ -166,6 +166,7 @@ ynh_print_info "Upgrading logrotate configuration..."
 ynh_print_info "Upgrading systemd configuration..."
 
 # Create a dedicated systemd config
+ynh_replace_string "__NODEJS_PATH__" "$nodejs_path" "../conf/systemd.service"
 ynh_add_systemd_config
 
 #=================================================
