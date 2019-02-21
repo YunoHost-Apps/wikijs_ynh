@@ -89,12 +89,9 @@ ynh_print_info "Reinstalling dependencies..."
 
 # Define and install dependencies
 
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-
 ynh_install_nodejs 10
 
-ynh_install_app_dependencies yarn redis-server postgresql postgresql-contrib build-essential
+ynh_install_app_dependencies redis-server postgresql postgresql-contrib build-essential
 
 #=================================================
 # RESTORE THE POSTGRESQL DATABASE

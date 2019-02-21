@@ -90,6 +90,13 @@ port=$(ynh_find_port 8095)
 ynh_app_setting_set $app port $port
 
 #=================================================
+# INSTALL YARN 1.13.0
+#=================================================
+ynh_print_info "Installing yarn 1.13.0..."
+
+sudo apt install -y ../sources/yarn_1.13.0_all.deb
+
+#=================================================
 # INSTALL DEPENDENCIES
 #=================================================
 ynh_print_info "Installing dependencies..."
@@ -101,12 +108,9 @@ ynh_print_info "Installing dependencies..."
 ###		- As well as the section "REINSTALL DEPENDENCIES" in the restore script
 ###		- And the section "UPGRADE DEPENDENCIES" in the upgrade script
 
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-
 ynh_install_nodejs 10
 
-ynh_install_app_dependencies yarn redis-server postgresql postgresql-contrib build-essential
+ynh_install_app_dependencies redis-server postgresql postgresql-contrib build-essential
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
@@ -347,7 +351,7 @@ systemctl reload nginx
 # START SERVICE
 #=================================================
 
-ynh_systemd_action --action=start --service_name=$app --line_match="Redis connection:"
+ynh_systemd_action --action=start --service_name=$app --line_match="Browse to http://localhost"
 
 #=================================================
 # END OF SCRIPT
