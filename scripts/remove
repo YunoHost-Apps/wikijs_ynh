@@ -67,7 +67,7 @@ ynh_remove_nodejs
 #=================================================
 ynh_print_info "Removing yarn 1.13.0..."
 
-sudo apt remove yarn
+sudo apt remove -y yarn
 
 #=================================================
 # REMOVE APP MAIN DIR
