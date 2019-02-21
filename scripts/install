@@ -325,7 +325,7 @@ systemctl reload nginx
 # START SERVICE
 #=================================================
 
-ynh_systemd_action --action=start --service_name=$app --line_match="Browse to http://localhost"
+ynh_systemd_action --action=start --service_name=$app --line_match="Browse to http://localhost" --log_path=systemd
 
 #=================================================
 # END OF SCRIPT
