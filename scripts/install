@@ -101,7 +101,12 @@ ynh_print_info "Installing dependencies..."
 ###		- As well as the section "REINSTALL DEPENDENCIES" in the restore script
 ###		- And the section "UPGRADE DEPENDENCIES" in the upgrade script
 
-ynh_install_nodejs 10
+
+if [ -n "$(uname -m | grep aarch64)" ]; then
+	ynh_install_nodejs 10 --arch arm64
+else
+	ynh_install_nodejs 10
+fi
 
 ynh_install_app_dependencies postgresql postgresql-contrib
 
