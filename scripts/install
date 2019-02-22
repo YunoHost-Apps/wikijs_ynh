@@ -103,7 +103,7 @@ ynh_print_info "Installing dependencies..."
 
 
 if [ -n "$(uname -m | grep aarch64)" ]; then
-	ynh_install_nodejs 10 --arch arm64
+	ynh_install_nodejs 10 arm64
 else
 	ynh_install_nodejs 10
 fi
