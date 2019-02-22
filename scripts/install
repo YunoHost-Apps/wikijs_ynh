@@ -102,12 +102,7 @@ ynh_print_info "Installing dependencies..."
 ###		- And the section "UPGRADE DEPENDENCIES" in the upgrade script
 
 
-if [ -n "$(uname -m | grep aarch64)" ]; then
-	ynh_install_nodejs 10 arm64
-else
-	ynh_install_nodejs 10
-fi
-
+ynh_install_nodejs 10
 ynh_install_app_dependencies postgresql postgresql-contrib
 
 #=================================================
