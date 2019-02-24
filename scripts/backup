@@ -69,7 +69,7 @@ ynh_psql_dump_db "$db_name" > db.sql
 #=================================================
 ynh_print_info "Backing up logrotate configuration..."
 
-ynh_backup "/etc/logrotate.d/$app"
+#ynh_backup "/etc/logrotate.d/$app"
 
 #=================================================
 # BACKUP SYSTEMD
