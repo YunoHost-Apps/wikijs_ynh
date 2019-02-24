@@ -57,7 +57,7 @@ fi
 ynh_secure_remove "/etc/apt/sources.list.d/yarn.list"
 
 # Remove old dependencies
-ynh_package_autoremove yarn redis-server build-essential
+ynh_package_remove yarn redis-server build-essential
 
 # Remove old log file
 ynh_secure_remove "/var/log/$app/"
