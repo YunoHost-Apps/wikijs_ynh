@@ -145,6 +145,8 @@ systemctl reload nginx
 
 ynh_systemd_action --action=start --service_name=$app --log_path=systemd
 
+sleep 0
+
 #=================================================
 # END OF SCRIPT
 #=================================================
