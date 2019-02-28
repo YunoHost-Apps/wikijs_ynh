@@ -327,6 +327,8 @@ systemctl reload nginx
 
 ynh_systemd_action --action=start --service_name=$app --line_match="Browse to http://localhost" --log_path=systemd
 
+sleep 30
+
 #=================================================
 # END OF SCRIPT
 #=================================================
