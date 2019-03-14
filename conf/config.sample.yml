@@ -42,7 +42,7 @@ db:
 # Enable only if Wiki.js is behind a reverse-proxy (nginx, apache, etc)
 # or a cloud proxying services like Cloudflare.
 
-trustProxy: false
+trustProxy: true
 
 # ---------------------------------------------------------------------
 # SSL/TLS Settings
