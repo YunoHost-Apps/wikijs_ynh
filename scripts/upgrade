@@ -112,7 +112,7 @@ ynh_print_info "Upgrading dependencies..."
 
 ynh_install_nodejs 10
 
-ynh_install_app_dependencies postgresql postgresql-contrib
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER

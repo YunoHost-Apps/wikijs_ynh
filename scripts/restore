@@ -91,7 +91,7 @@ ynh_print_info "Reinstalling dependencies..."
 
 ynh_install_nodejs 10
 
-ynh_install_app_dependencies postgresql postgresql-contrib
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # RESTORE THE POSTGRESQL DATABASE
