@@ -59,6 +59,9 @@ ynh_secure_remove "/etc/apt/sources.list.d/yarn.list"
 # Remove old log file
 ynh_secure_remove "/var/log/$app/"
 
+# Create PostgreSQL User
+ynh_psql_create_user $db_name $db_pwd
+
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
