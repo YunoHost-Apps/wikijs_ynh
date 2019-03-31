@@ -19,10 +19,10 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get $app domain)
 path_url=$(ynh_app_setting_get $app path)
-#admin=$(ynh_app_setting_get $app admin)
+
 is_public=$(ynh_app_setting_get $app is_public)
 final_path=$(ynh_app_setting_get $app final_path)
-#language=$(ynh_app_setting_get $app language)
+
 db_name=$(ynh_app_setting_get $app db_name)
 db_pwd=$(ynh_app_setting_get $app db_pwd)
 port=$(ynh_app_setting_get $app port)
@@ -58,6 +58,9 @@ ynh_secure_remove "/etc/apt/sources.list.d/yarn.list"
 
 # Remove old log file
 ynh_secure_remove "/var/log/$app/"
+
+# Create PostgreSQL User
+ynh_psql_create_user $db_name $db_pwd
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
@@ -123,39 +126,18 @@ ynh_print_info "Making sure dedicated system user exists..."
 ynh_system_user_create "$app" "$final_path"
 
 #=================================================
-# PHP-FPM CONFIGURATION
-#=================================================
-ynh_print_info "Upgrading php-fpm configuration..."
-
-# Create a dedicated php-fpm config
-#ynh_add_fpm_config
-
-#=================================================
 # MODIFY A CONFIG FILE
 #=================================================
 
 cp -f ../conf/config.sample.yml "$final_path/config.yml"
 
-### `ynh_replace_string` is used to replace a string in a file.
-### (It's compatible with sed regular expressions syntax)
-
 ynh_replace_string "__PORT__" "$port" "$final_path/config.yml"
 ynh_replace_string "__DB_PWD__" "$db_pwd" "$final_path/config.yml"
 ynh_replace_string "__DB_NAME__" "$db_name" "$final_path/config.yml"
 
-### Verify the checksum of a file, stored by `ynh_store_file_checksum` in the install script.
-### And create a backup of this file if the checksum is different. So the file will be backed up if the admin had modified it.
 ynh_backup_if_checksum_is_different "$final_path/config.yml"
 # Recalculate and store the checksum of the file for the next upgrade.
 ynh_store_file_checksum "$final_path/config.yml"
-
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_print_info "Upgrading logrotate configuration..."
-
-# Use logrotate to manage app-specific logfile(s)
-#ynh_use_logrotate --non-append
 
 #=================================================
 # SETUP SYSTEMD
