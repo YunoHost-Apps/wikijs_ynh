@@ -13,7 +13,7 @@
         "name": "yalh76"
     },
     "requirements": {
-        "yunohost": ">= 3.4"
+        "yunohost": ">= 3.5"
     },
     "multi_instance": true,
     "services": [
@@ -25,8 +25,8 @@
                 "name": "domain",
                 "type": "domain",
                 "ask": {
-                    "en": "Choose a domain name for wikijs",
-                    "fr": "Choisissez un nom de domaine pour wikijs"
+                    "en": "Choose a domain name for Wiki.js",
+                    "fr": "Choisissez un nom de domaine pour Wiki.js"
                 },
                 "example": "example.com"
             },
