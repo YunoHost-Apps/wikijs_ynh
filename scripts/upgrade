@@ -139,6 +139,7 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 # MODIFY A CONFIG FILE
 #=================================================
 
+ynh_backup_if_checksum_is_different --file="$final_path/config.yml"
 cp -f ../conf/config.sample.yml "$final_path/config.yml"
 
 ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$final_path/config.yml"
@@ -149,7 +150,6 @@ ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --ta
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
-ynh_backup_if_checksum_is_different --file="$final_path/config.yml"
 # Recalculate and store the checksum of the file for the next upgrade.
 ynh_store_file_checksum --file="$final_path/config.yml"
 
