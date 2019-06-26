@@ -13,7 +13,7 @@ An open source, modern and powerful wiki app built on Node.js, Git and Markdown 
 
 **Wiki.js** require a dedicated **root domain**, eg. wikijs.domain.tld
 
-**Shipped version:** 2.0.0-beta.203
+**Shipped version:** 2.0.0-beta.208
 
 ## Screenshots
 
