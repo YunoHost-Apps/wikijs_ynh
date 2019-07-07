@@ -33,8 +33,9 @@ An open source, modern and powerful wiki app built on Node.js, Git and Markdown 
 
 #### Multi-users support
 
-No LDAP and HTTP auth for now but planned to be supported.
-The app can be used by multiple users?
+LDAP is implemented, root will receive a mail at the end of the installation or the upgrade with the informations to configure LDAP.
+HTTP auth for now but planned to be supported.
+The app can be used by multiple users
 
 #### Supported architectures
 

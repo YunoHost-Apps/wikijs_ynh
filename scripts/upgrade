@@ -7,6 +7,7 @@
 #=================================================
 
 source _common.sh
+source ynh_send_readme_to_admin__2
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -25,6 +26,8 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 db_pwd=$(ynh_app_setting_get --app=$app --key=db_pwd)
 port=$(ynh_app_setting_get --app=$app --key=port)
+ldap_user=$(ynh_app_setting_get --app=$app --key=ldap_user)
+ldap_password=$(ynh_app_setting_get --app=$app --key=ldap_password)
 
 #=================================================
 # CHECK VERSION
@@ -58,6 +61,15 @@ if [ -z "$final_path" ]; then
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
+# If ldap_user doesn't exist, retrieve it or create it
+if [[ -z "$ldap_user" ]]; then
+	ldap_user="${app}_ldap"
+	ldap_password=$(ynh_string_random --length=8)
+	ynh_app_setting_set "$app" ldap_user "$ldap_user"
+	ynh_app_setting_set "$app" ldap_password "$ldap_password"
+	yunohost user create $ldap_user --firstname $app --lastname $app --mail ${ldap_user}@$domain --password $ldap_password -q 0
+fi
+
 # Remove yarn repository
 ynh_secure_remove --file="/etc/apt/sources.list.d/yarn.list"
 
@@ -83,18 +95,11 @@ ynh_clean_setup () {
 ynh_abort_if_errors
 
 #=================================================
-# CHECK THE PATH
-#=================================================
-
-# Normalize the URL path syntax
-
-path_url=$(ynh_normalize_url_path --path_url=$path_url)
-
-#=================================================
 # STANDARD UPGRADE STEPS
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
+ynh_print_info --message="Stopping a systemd service..."
 
 ynh_systemd_action --service_name=$app --action="stop"
 
@@ -136,22 +141,25 @@ ynh_print_info --message="Making sure dedicated system user exists..."
 ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
+# SPECIFIC UPGRADE
+#=================================================
 # MODIFY A CONFIG FILE
 #=================================================
 
-ynh_backup_if_checksum_is_different --file="$final_path/config.yml"
-cp -f ../conf/config.sample.yml "$final_path/config.yml"
+config_file="$final_path/config.yml"
+ynh_backup_if_checksum_is_different --file=$config_file
+cp -f ../conf/config.sample.yml $config_file
 
-ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$final_path/config.yml"
-ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$final_path/config.yml"
-ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$final_path/config.yml"
+ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file=$config_file
+ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file=$config_file
+ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file=$config_file
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
 # Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum --file="$final_path/config.yml"
+ynh_store_file_checksum --file=$config_file
 
 #=================================================
 # SETUP SYSTEMD
@@ -184,8 +192,9 @@ then
 fi
 
 #=================================================
-# START SERVICE
+# START SYSTEMD SERVICE
 #=================================================
+ynh_print_info --message="Starting a systemd service..."
 
 ynh_systemd_action --service_name=$app --action="start" --log_path=systemd
 
@@ -197,6 +206,18 @@ sleep 30
 ynh_print_info --message="Reloading nginx web server..."
 
 ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
+# SEND README TO ADMIN
+#=================================================
+ynh_print_info --message="Sending ReadMe to admin..."
+
+ynh_replace_string --match_string="__LDAP_USER__"    --replace_string="$ldap_user"    --target_file="../conf/ldap_message"
+ynh_replace_string --match_string="__LDAP_PASSWORD__"    --replace_string="$ldap_password"    --target_file="../conf/ldap_message"
+ynh_replace_string --match_string="__DOMAIN__"    --replace_string="$domain"    --target_file="../conf/ldap_message"
+ynh_replace_string --match_string="__PATH_URL__"    --replace_string="$path_url"    --target_file="../conf/ldap_message"
+
+ynh_send_readme_to_admin --app_message="../conf/ldap_message" --recipients="root" --type='upgrade'
 
 #=================================================
 # END OF SCRIPT
