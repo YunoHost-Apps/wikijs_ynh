@@ -7,6 +7,7 @@
 #=================================================
 
 source _common.sh
+source ynh_send_readme_to_admin__2
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -29,6 +30,9 @@ is_public=$YNH_APP_ARG_IS_PUBLIC
 
 app=$YNH_APP_INSTANCE_NAME
 
+ldap_user="${app}_ldap"
+ldap_password=$(ynh_string_random --length=8)
+
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
@@ -48,6 +52,9 @@ ynh_print_info --message="Storing installation settings..."
 ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=is_public --value=$is_public
+
+ynh_app_setting_set --app=$app --key=ldap_user --value=$ldap_user
+ynh_app_setting_set --app=$app --key=ldap_password --value=$ldap_password
 
 #=================================================
 # STANDARD MODIFICATIONS
@@ -109,6 +116,13 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 #=================================================
 # SPECIFIC SETUP
 #=================================================
+# CREATE LDAP USER
+#=================================================
+ynh_print_info --message="Creating LDAP user..."
+
+yunohost user create $ldap_user --firstname $app --lastname $app --mail ${ldap_user}@$domain --password $ldap_password -q 0
+
+#=================================================
 # SETUP SYSTEMD
 #=================================================
 ynh_print_info --message="Configuring a systemd service..."
@@ -121,18 +135,19 @@ ynh_add_systemd_config
 # MODIFY A CONFIG FILE
 #=================================================
 
-cp -f ../conf/config.sample.yml "$final_path/config.yml"
+config_file="$final_path/config.yml"
+cp -f ../conf/config.sample.yml $config_file
 
-ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$final_path/config.yml"
-ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$final_path/config.yml"
-ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$final_path/config.yml"
+ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file=$config_file
+ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file=$config_file
+ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file=$config_file
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
 # Calculate and store the config file checksum into the app settings
-ynh_store_file_checksum --file="$final_path/config.yml"
+ynh_store_file_checksum --file=$config_file
 
 #=================================================
 # GENERIC FINALIZATION
@@ -176,6 +191,18 @@ fi
 ynh_print_info --message="Reloading nginx web server..."
 
 ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
+# SEND README TO ADMIN
+#=================================================
+ynh_print_info --message="Sending ReadMe to admin..."
+
+ynh_replace_string --match_string="__LDAP_USER__"    --replace_string="$ldap_user"    --target_file="../conf/ldap_message"
+ynh_replace_string --match_string="__LDAP_PASSWORD__"    --replace_string="$ldap_password"    --target_file="../conf/ldap_message"
+ynh_replace_string --match_string="__DOMAIN__"    --replace_string="$domain"    --target_file="../conf/ldap_message"
+ynh_replace_string --match_string="__PATH_URL__"    --replace_string="$path_url"    --target_file="../conf/ldap_message"
+
+ynh_send_readme_to_admin --app_message="../conf/ldap_message" --recipients="root" --type='install'
 
 #=================================================
 # END OF SCRIPT
