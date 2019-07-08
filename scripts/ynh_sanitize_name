@@ -1,0 +1,20 @@
+# Sanitize a string intended to be the firstname lastname
+# (More specifically : removing - . and _)
+#
+# example: username=$(ynh_sanitize_name --name=$app)
+#
+# usage: ynh_sanitize_name --name=name
+# | arg: -n, --name - name to correct/sanitize
+# | ret: the corrected name
+#
+ynh_sanitize_name () {
+	# Declare an array to define the options of this helper.
+	local legacy_args=n
+	declare -Ar args_array=( [n]=name= )
+	local name
+	# Manage arguments with getopts
+	ynh_handle_getopts_args "$@"
+
+	# We should avoid having - and . in the name of databases. They are replaced by _
+	echo ${name//[-._]/}
+}

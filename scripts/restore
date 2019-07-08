@@ -125,7 +125,7 @@ sleep 30
 #=================================================
 ynh_print_info --message="Creating LDAP user..."
 
-yunohost user create $ldap_user --firstname $app --lastname $app --mail ${ldap_user}@$domain --password $ldap_password -q 0
+yunohost user create $ldap_user --firstname $ldap_user --lastname $ldap_user --mail ${ldap_user}@$domain --password $ldap_password -q 0
 
 #=================================================
 # GENERIC FINALIZATION
