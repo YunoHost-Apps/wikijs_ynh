@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Sanitize a string intended to be the firstname lastname
 # (More specifically : removing - . and _)
 #
