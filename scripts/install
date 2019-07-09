@@ -8,7 +8,6 @@
 
 source _common.sh
 source ynh_send_readme_to_admin__2
-source ynh_sanitize_name
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -31,7 +30,7 @@ is_public=$YNH_APP_ARG_IS_PUBLIC
 
 app=$YNH_APP_INSTANCE_NAME
 
-ldap_user=$(ynh_sanitize_name --name="${app}ldap")
+ldap_user="svc_${app}_ldap"
 ldap_password=$(ynh_string_random --length=8)
 
 #=================================================
@@ -121,7 +120,7 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 #=================================================
 ynh_print_info --message="Creating LDAP user..."
 
-yunohost user create $ldap_user --firstname $ldap_user --lastname $ldap_user --mail ${ldap_user}@$domain --password $ldap_password -q 0
+yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --mail ${ldap_user}@$domain --password $ldap_password -q 0
 
 #=================================================
 # SETUP SYSTEMD

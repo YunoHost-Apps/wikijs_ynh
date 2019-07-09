@@ -63,11 +63,11 @@ fi
 
 # If ldap_user doesn't exist, retrieve it or create it
 if [[ -z "$ldap_user" ]]; then
-	ldap_user=$(ynh_sanitize_name --name="${app}ldap")
+	ldap_user="svc_${app}_ldap"
 	ldap_password=$(ynh_string_random --length=8)
 	ynh_app_setting_set "$app" ldap_user "$ldap_user"
 	ynh_app_setting_set "$app" ldap_password "$ldap_password"
-	yunohost user create $ldap_user --firstname $app --lastname $app --mail ${ldap_user}@$domain --password $ldap_password -q 0
+	yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --mail ${ldap_user}@$domain --password $ldap_password -q 0
 fi
 
 # Remove yarn repository
