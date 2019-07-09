@@ -6,6 +6,7 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
+#Keep this path for calling _common.sh inside the execution's context of backup and restore scripts
 source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
@@ -32,6 +33,8 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 db_user=$db_name
 db_pwd=$(ynh_app_setting_get --app=$app --key=db_pwd)
+ldap_user=$(ynh_app_setting_get --app=$app --key=ldap_user)
+ldap_password=$(ynh_app_setting_get --app=$app --key=ldap_password)
 
 #=================================================
 # CHECK IF THE APP CAN BE RESTORED
@@ -83,7 +86,6 @@ ynh_print_info --message="Reinstalling dependencies..."
 # Define and install dependencies
 
 ynh_install_nodejs --nodejs_version="10"
-
 ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
@@ -117,6 +119,13 @@ ynh_print_info --message="Starting a systemd service..."
 ynh_systemd_action --service_name=$app --action=start --log_path=systemd
 
 sleep 30
+
+#=================================================
+# CREATE LDAP USER
+#=================================================
+ynh_print_info --message="Creating LDAP user..."
+
+yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --mail ${ldap_user}@$domain --password $ldap_password -q 0
 
 #=================================================
 # GENERIC FINALIZATION
