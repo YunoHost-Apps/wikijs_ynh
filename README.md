@@ -9,11 +9,13 @@ If you don't have YunoHost, please see [here](https://yunohost.org/#/install) to
 ## Overview
 An open source, modern and powerful wiki app built on Node.js, Git and Markdown for YunoHost.
 
+**Shipped version:** 2.0.0-beta.230
+
+## Important points to read before installing
+
 **Wiki.js is still under development, all features not already implemented.**
 
 **Wiki.js** require a dedicated **root domain**, eg. wikijs.domain.tld
-
-**Shipped version:** 2.0.0-beta.208
 
 ## Screenshots
 
@@ -59,7 +61,6 @@ The app can be used by multiple users
 Developers info
 ----------------
 
-**Only if you want to use a testing branch for coding, instead of merging directly into master.**
 Please do your pull request to the [testing branch](https://github.com/YunoHost-Apps/wikijs_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
