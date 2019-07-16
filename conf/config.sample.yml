@@ -28,6 +28,7 @@ db:
   user: __DB_NAME__
   pass: __DB_PWD__
   db: __DB_NAME__
+  ssl: false
   # SQLite only:
   storage: path/to/database.sqlite
 
