@@ -2,7 +2,7 @@
 # Wiki.js - CONFIGURATION                                             #
 #######################################################################
 # Full documentation + examples:
-# https://docs-beta.requarks.io/install
+# https://docs.requarks.io/install
 
 # ---------------------------------------------------------------------
 # Port the server should listen to
@@ -113,3 +113,9 @@ uploads:
 # download the offline files for sideloading.
 
 offline: false
+
+# ---------------------------------------------------------------------
+# Data Path
+# ---------------------------------------------------------------------
+# Writeable data path for Wiki.js, mainly for cache and user uploads.
+dataPath: ./data
