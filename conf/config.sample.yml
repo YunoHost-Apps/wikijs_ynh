@@ -38,14 +38,6 @@ db:
 # Do not change unless you know what you are doing!
 
 # ---------------------------------------------------------------------
-# Use X-Forwarded-For header
-# ---------------------------------------------------------------------
-# Enable only if Wiki.js is behind a reverse-proxy (nginx, apache, etc)
-# or a cloud proxying services like Cloudflare.
-
-trustProxy: true
-
-# ---------------------------------------------------------------------
 # SSL/TLS Settings
 # ---------------------------------------------------------------------
 # Consider using a reverse proxy (e.g. nginx) if you require more
