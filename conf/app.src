@@ -1,5 +1,5 @@
-SOURCE_URL=https://github.com/Requarks/wiki/releases/download/2.0.0-beta.303/wiki-js.tar.gz
-SOURCE_SUM=efb50def29453680c1707383d8d0429a73ee34d190067b0705154ad9ff276877
+SOURCE_URL=https://github.com/Requarks/wiki/releases/download/2.0.12/wiki-js.tar.gz
+SOURCE_SUM=67ad4b7b3d70085da277fb7beacbfd99f97715cd81d99ff5e6eef3c407c05bc3
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=false

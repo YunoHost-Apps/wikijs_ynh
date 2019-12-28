@@ -101,7 +101,7 @@ ynh_abort_if_errors
 #=================================================
 ynh_print_info --message="Stopping a systemd service..."
 
-ynh_systemd_action --service_name=$app --action="stop"
+ynh_systemd_action --service_name=$app --action="stop" --log_path="systemd" --line_match="Stopped wikijs service"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -150,16 +150,16 @@ config_file="$final_path/config.yml"
 ynh_backup_if_checksum_is_different --file=$config_file
 cp -f ../conf/config.sample.yml $config_file
 
-ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file=$config_file
-ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file=$config_file
-ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file=$config_file
+ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$config_file"
+ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$config_file"
+ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$config_file"
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
 # Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum --file=$config_file
+ynh_store_file_checksum --file="$config_file"
 
 #=================================================
 # SETUP SYSTEMD
@@ -196,9 +196,7 @@ fi
 #=================================================
 ynh_print_info --message="Starting a systemd service..."
 
-ynh_systemd_action --service_name=$app --action="start" --log_path=systemd
-
-sleep 30
+ynh_systemd_action --service_name=$app --action="start" --log_path="systemd" --line_match="HTTP Server:"
 
 #=================================================
 # RELOAD NGINX
