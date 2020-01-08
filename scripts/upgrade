@@ -88,7 +88,7 @@ ynh_print_info --message="Backing up the app before upgrading (may take a while)
 ynh_backup_before_upgrade
 
 #Workaround to be remove in next version
-ynh_systemd_action --service_name=$app --action="start" --log_path="systemd"
+ynh_systemd_action --service_name=$app --action="start" --log_path=systemd --line_match="HTTP Server:"
 
 ynh_clean_setup () {
 	# restore it if the upgrade fails
@@ -105,7 +105,7 @@ ynh_abort_if_errors
 #=================================================
 ynh_print_info --message="Stopping a systemd service..."
 
-ynh_systemd_action --service_name=$app --action="stop" --log_path="systemd" --line_match="Stopped wikijs service"
+ynh_systemd_action --service_name=$app --action="stop" --log_path=systemd --line_match="Stopped wikijs service"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -200,7 +200,7 @@ fi
 #=================================================
 ynh_print_info --message="Starting a systemd service..."
 
-ynh_systemd_action --service_name=$app --action="start" --log_path="systemd" --line_match="HTTP Server:"
+ynh_systemd_action --service_name=$app --action="start" --log_path=systemd --line_match="HTTP Server:"
 
 #=================================================
 # RELOAD NGINX
