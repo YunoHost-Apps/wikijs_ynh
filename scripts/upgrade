@@ -79,6 +79,10 @@ ynh_secure_remove --file="/var/log/$app/"
 # Create PostgreSQL User
 ynh_psql_create_user $db_name $db_pwd
 
+# Install pg_trgm extension to provide a PostgreSQL search solution
+ynh_psql_test_if_first_run
+ynh_psql_execute_as_root --sql="CREATE EXTENSION IF NOT EXISTS pg_trgm;" --database=$db_name
+
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
