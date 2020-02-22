@@ -32,6 +32,7 @@ ldap_password=$(ynh_app_setting_get --app=$app --key=ldap_password)
 #=================================================
 # CHECK VERSION
 #=================================================
+ynh_print_info --message="Checking version..."
 
 upgrade_type=$(ynh_check_app_version_changed)
 
