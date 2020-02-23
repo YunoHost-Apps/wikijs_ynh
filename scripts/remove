@@ -29,6 +29,7 @@ ldap_user=$(ynh_app_setting_get --app=$app --key=ldap_user)
 #=================================================
 # REMOVE SERVICE INTEGRATION IN YUNOHOST
 #=================================================
+ynh_print_info --message="Removing service integration in YunoHost..."
 
 # Remove the service from the list of services known by Yunohost (added from `yunohost service add`)
 if ynh_exec_warn_less yunohost service status $app >/dev/null
@@ -81,6 +82,7 @@ ynh_remove_nginx_config
 #=================================================
 # CLOSE A PORT
 #=================================================
+ynh_print_info --message="Closing a port..."
 
 if yunohost firewall list | grep -q "\- $port$"
 then
