@@ -9,11 +9,9 @@ If you don't have YunoHost, please look at [the guide](https://yunohost.org/#/in
 ## Overview
 A copylefted libre software, modern and powerful wiki app built on Node.js, Git and Markdown for YunoHost.
 
-**Shipped version:** 2.2.51
+**Shipped version:** 2.3.77
 
 ## Important points before installing
-
-**Wiki.js is still under development, not all features are implemented yet.**
 
 **Wiki.js** requires a dedicated **root domain**, e.g. wikijs.domain.tld
 

@@ -6,7 +6,7 @@
         "en": "An open source, modern and powerful wiki app built on Node.js, Git and Markdown.",
         "fr": "Un wiki moderne et open source propulsé Node.js, Git et Markdown."
     },
-    "version": "2.2.51~ynh1",
+    "version": "2.3.77~ynh1",
     "url": "https://wiki.js.org/",
     "license": "AGPL-3.0-or-later",
     "maintainer": {
