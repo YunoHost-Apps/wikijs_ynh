@@ -1,5 +1,5 @@
-Wikijs was successfully installed :)
-Please open https://__DOMAIN____PATH_URL__ and follow the steps to setup Wiki.js
+Wiki.js was successfully installed :)
+Please open https://__DOMAIN____PATH_URL__ and follow the steps to setup LDAP for Wiki.js
 
 After following the setup steps, login, create an home page, click on the upper right wheel.
 In the Modules / Authentication, activate the LDAP / Active Directory and apply following parameters and click Apply:
@@ -15,6 +15,6 @@ Registration
 Allow self-registration: Yes
 Assign to group: Guest
 
-When activated, users will be abble to login using ldap providing their username (not email address) and password.
+When activated, users will be able to login using ldap and providing their username (not email address) and password.
 
 If you facing an issue or want to improve this app, please open a new issue in this project: https://github.com/YunoHost-Apps/wikijs_ynh
