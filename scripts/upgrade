@@ -124,12 +124,24 @@ then
 	tmpdir="$(mktemp -d)"
 
 	rsync -a "$config_file" "$tmpdir/."
+    if [ -d "$final_path/.ssh" ]; then
+	    rsync -a "$final_path/.ssh" "$tmpdir/."
+    fi
+    if [ -d "$final_path/data" ]; then
+	    rsync -a "$final_path/data" "$tmpdir/."
+    fi
 	ynh_secure_remove --file="$final_path"
 
 	# Download, check integrity, uncompress and patch the source from app.src
 	ynh_setup_source --dest_dir="$final_path"
 
 	rsync -a "$tmpdir/config.yml" "$final_path/."
+    if [ -d "$tmpdir/.ssh" ]; then
+	    rsync -a "$tmpdir/.ssh" "$final_path/."
+    fi
+    if [ -d "$tmpdir/data" ]; then
+	    rsync -a "$tmpdir/data" "$final_path/."
+    fi
 fi
 
 #=================================================
