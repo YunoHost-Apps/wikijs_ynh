@@ -13,7 +13,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_print_info --message="Loading installation settings..."
+ynh_script_progression --message="Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -32,14 +32,14 @@ ldap_password=$(ynh_app_setting_get --app=$app --key=ldap_password)
 #=================================================
 # CHECK VERSION
 #=================================================
-ynh_print_info --message="Checking version..."
+ynh_script_progression --message="Checking version..."
 
 upgrade_type=$(ynh_check_app_version_changed)
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_print_info --message="Ensuring downward compatibility..."
+ynh_script_progression --message="Ensuring downward compatibility..."
 
 # Fix is_public as a boolean value
 if [ "$is_public" = "Yes" ]; then
@@ -87,7 +87,7 @@ ynh_psql_execute_as_root --sql="CREATE EXTENSION IF NOT EXISTS pg_trgm;" --datab
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_print_info --message="Backing up the app before upgrading (may take a while)..."
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..."
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -108,7 +108,7 @@ ynh_abort_if_errors
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_print_info --message="Stopping a systemd service..."
+ynh_script_progression --message="Stopping a systemd service..."
 
 ynh_systemd_action --service_name=$app --action="stop" --log_path=systemd --line_match="Stopped wikijs service"
 
@@ -118,7 +118,7 @@ ynh_systemd_action --service_name=$app --action="stop" --log_path=systemd --line
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-	ynh_print_info --message="Upgrading source files..."
+	ynh_script_progression --message="Upgrading source files..."
 
 	config_file="$final_path/config.yml"
 	tmpdir="$(mktemp -d)"
@@ -147,7 +147,7 @@ fi
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_print_info --message="Upgrading nginx web server configuration..."
+ynh_script_progression --message="Upgrading nginx web server configuration..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -155,16 +155,16 @@ ynh_add_nginx_config
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_print_info --message="Upgrading dependencies..."
+ynh_script_progression --message="Upgrading dependencies..."
 
-ynh_install_nodejs --nodejs_version="10"
-
+ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
+ynh_use_nodejs
 ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_print_info --message="Making sure dedicated system user exists..."
+ynh_script_progression --message="Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
 ynh_system_user_create --username=$app --home_dir="$final_path"
@@ -174,6 +174,7 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 #=================================================
 # MODIFY A CONFIG FILE
 #=================================================
+ynh_script_progression --message="Modifying a config file..."
 
 config_file="$final_path/config.yml"
 ynh_backup_if_checksum_is_different --file=$config_file
@@ -183,27 +184,23 @@ ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_f
 ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$config_file"
 ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$config_file"
 
-#=================================================
-# STORE THE CONFIG FILE CHECKSUM
-#=================================================
-
 # Recalculate and store the checksum of the file for the next upgrade.
 ynh_store_file_checksum --file="$config_file"
 
 #=================================================
 # SETUP SYSTEMD
 #=================================================
-ynh_print_info --message="Upgrading systemd configuration..."
+ynh_script_progression --message="Upgrading systemd configuration..."
 
 # Create a dedicated systemd config
-ynh_replace_string --match_string="__NODEJS_PATH__" --replace_string="$nodejs_path" --target_file="../conf/systemd.service"
-ynh_add_systemd_config
+ynh_add_systemd_config --others_var="ynh_node ynh_node_load_PATH"
 
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
 # SECURE FILES AND DIRECTORIES
 #=================================================
+ynh_script_progression --message="Securing files and directories..."
 
 # Set permissions on app files
 chown -R "$app":"$app" "$final_path"
@@ -211,7 +208,7 @@ chown -R "$app":"$app" "$final_path"
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_print_info --message="Upgrading SSOwat configuration..."
+ynh_script_progression --message="Upgrading SSOwat configuration..."
 
 # Make app public if necessary
 if [ $is_public -eq 1 ]
@@ -223,21 +220,21 @@ fi
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_print_info --message="Starting a systemd service..."
+ynh_script_progression --message="Starting a systemd service..."
 
 ynh_systemd_action --service_name=$app --action="start" --log_path=systemd --line_match="HTTP Server:"
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_print_info --message="Reloading nginx web server..."
+ynh_script_progression --message="Reloading nginx web server..."
 
 ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # SEND README TO ADMIN
 #=================================================
-ynh_print_info --message="Sending ReadMe to admin..."
+ynh_script_progression --message="Sending ReadMe to admin..."
 
 ynh_replace_string --match_string="__LDAP_USER__"    --replace_string="$ldap_user"    --target_file="../conf/ldap_message"
 ynh_replace_string --match_string="__LDAP_PASSWORD__"    --replace_string="$ldap_password"    --target_file="../conf/ldap_message"
@@ -250,4 +247,4 @@ ynh_send_readme_to_admin --app_message="../conf/ldap_message" --recipients="root
 # END OF SCRIPT
 #=================================================
 
-ynh_print_info --message="Upgrade of $app completed"
+ynh_script_progression --message="Upgrade of $app completed"

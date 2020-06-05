@@ -7,9 +7,9 @@ Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__FINALPATH__
-ExecStart=__NODEJS_PATH__/node __FINALPATH__/server
+ExecStart=__YNH_NODE__ __FINALPATH__/server
 Restart=always
-Environment=PATH=/usr/bin:/usr/local/bin:__NODEJS_PATH__
+Environment=__YNH_NODE_LOAD_PATH__
 Environment=NODE_ENV=production
 
 [Install]
