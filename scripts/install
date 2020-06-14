@@ -27,10 +27,11 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
 is_public=$YNH_APP_ARG_IS_PUBLIC
-ldap_user="svc_${app}_ldap"
-ldap_password=$(ynh_string_random --length=8)
 
 app=$YNH_APP_INSTANCE_NAME
+
+ldap_user="svc_${app}_ldap"
+ldap_password=$(ynh_string_random --length=8)
 
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
