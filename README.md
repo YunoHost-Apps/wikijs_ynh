@@ -9,7 +9,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 ## Overview
 A copylefted libre software, modern and powerful wiki app built on Node.js, Git and Markdown for YunoHost.
 
-**Shipped version:** 2.4.105
+**Shipped version:** 2.4.107
 
 ## Important points before installing
 
