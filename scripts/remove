@@ -72,9 +72,9 @@ ynh_secure_remove --file="$final_path"
 #=================================================
 # REMOVE NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Removing nginx web server configuration..."
+ynh_script_progression --message="Removing NGINX web server configuration..."
 
-# Remove the dedicated nginx config
+# Remove the dedicated NGINX config
 ynh_remove_nginx_config
 
 #=================================================
@@ -92,7 +92,7 @@ fi
 #=================================================
 # REMOVE LDAP USER
 #=================================================
-ynh_script_progression --message="Removing ldap user..."
+ynh_script_progression --message="Removing LDAP user..."
 
 yunohost user delete $ldap_user --purge
 
