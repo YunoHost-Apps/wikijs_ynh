@@ -206,6 +206,13 @@ ynh_script_progression --message="Securing files and directories..."
 chown -R "$app":"$app" "$final_path"
 
 #=================================================
+# INTEGRATE SERVICE IN YUNOHOST
+#=================================================
+ynh_script_progression --message="Integrating service in YunoHost..."
+
+yunohost service add $app --description "$app daemon for Wiki.js" --log_type systemd
+
+#=================================================
 # SETUP SSOWAT
 #=================================================
 ynh_script_progression --message="Upgrading SSOwat configuration..."
