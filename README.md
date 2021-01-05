@@ -1,7 +1,7 @@
 # Wiki.js for YunoHost
 
 [![Integration level](https://dash.yunohost.org/integration/wikijs.svg)](https://dash.yunohost.org/appci/app/wikijs) ![](https://ci-apps.yunohost.org/ci/badges/wikijs.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/wikijs.maintain.svg)  
-[![Install Wiki.js with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=wikijs)
+[![Install Wiki.js with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=wikijs)
 
 > *This package allows you to install Wiki.js quickly and simply on a YunoHost server.  
 If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
