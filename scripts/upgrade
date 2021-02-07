@@ -117,7 +117,7 @@ ynh_abort_if_errors
 #=================================================
 ynh_script_progression --message="Stopping a systemd service..."
 
-ynh_systemd_action --service_name=$app --action="stop" --log_path=systemd --line_match="Stopped wikijs service"
+ynh_systemd_action --service_name=$app --action=stop --log_path=systemd --line_match="Stopped wikijs service"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -166,7 +166,7 @@ ynh_script_progression --message="Upgrading dependencies..."
 
 ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
 ynh_use_nodejs
-ynh_install_app_dependencies $pkg_dependencies
+ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
@@ -224,7 +224,7 @@ yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/lo
 #=================================================
 ynh_script_progression --message="Starting a systemd service..."
 
-ynh_systemd_action --service_name=$app --action="start" --log_path=systemd --line_match="HTTP Server:"
+ynh_systemd_action --service_name=$app --action=start --log_path=systemd --line_match="HTTP Server:"
 
 #=================================================
 # RELOAD NGINX
