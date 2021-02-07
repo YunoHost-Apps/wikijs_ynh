@@ -71,6 +71,13 @@ if [[ -z "$ldap_user" ]]; then
 	yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --mail ${ldap_user}@$domain --password $ldap_password -q 0
 fi
 
+# Cleaning legacy permissions
+if ynh_legacy_permissions_exists; then
+	ynh_legacy_permissions_delete_all
+
+	ynh_app_setting_delete --app=$app --key=is_public
+fi
+
 # Remove yarn repository
 ynh_secure_remove --file="/etc/apt/sources.list.d/yarn.list"
 
@@ -203,7 +210,7 @@ ynh_add_systemd_config --others_var="ynh_node ynh_node_load_PATH"
 ynh_script_progression --message="Securing files and directories..."
 
 # Set permissions on app files
-chown -R "$app":"$app" "$final_path"
+chown -R $app: "$final_path"
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
@@ -211,18 +218,6 @@ chown -R "$app":"$app" "$final_path"
 ynh_script_progression --message="Integrating service in YunoHost..."
 
 yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Upgrading SSOwat configuration..."
-
-# Make app public if necessary
-if [ $is_public -eq 1 ]
-then
-	# unprotected_uris allows SSO credentials to be passed anyway
-	ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
-fi
 
 #=================================================
 # START SYSTEMD SERVICE

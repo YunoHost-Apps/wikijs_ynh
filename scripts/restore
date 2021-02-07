@@ -120,7 +120,7 @@ yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/lo
 #=================================================
 ynh_script_progression --message="Starting a systemd service..."
 
-ynh_systemd_action --service_name=$app --action="start" --log_path=systemd --line_match="HTTP Server:"
+ynh_systemd_action --service_name=$app --action=start --log_path=systemd --line_match="HTTP Server:"
 
 #=================================================
 # CREATE LDAP USER
