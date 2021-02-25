@@ -174,7 +174,7 @@ yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/lo
 ynh_script_progression --message="Starting a systemd service..."
 
 # Start a systemd service
-ynh_systemd_action --service_name=$app --action="start" --log_path=systemd --line_match="HTTP Server:"
+ynh_systemd_action --service_name=$app --action=start --log_path=systemd --line_match="HTTP Server:"
 
 #=================================================
 # SETUP SSOWAT
@@ -184,8 +184,6 @@ ynh_script_progression --message="Configuring permissions..."
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-	# Everyone can access the app.
-	# The "main" permission is automatically created before the install script.
 	ynh_permission_update --permission="main" --add="visitors"
 fi
 
@@ -201,10 +199,10 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 ynh_script_progression --message="Sending ReadMe to admin..."
 
-ynh_replace_string --match_string="__LDAP_USER__"    --replace_string="$ldap_user"    --target_file="../conf/ldap_message"
-ynh_replace_string --match_string="__LDAP_PASSWORD__"    --replace_string="$ldap_password"    --target_file="../conf/ldap_message"
-ynh_replace_string --match_string="__DOMAIN__"    --replace_string="$domain"    --target_file="../conf/ldap_message"
-ynh_replace_string --match_string="__PATH_URL__"    --replace_string="$path_url"    --target_file="../conf/ldap_message"
+ynh_replace_string --match_string="__LDAP_USER__" --replace_string="$ldap_user" --target_file="../conf/ldap_message"
+ynh_replace_string --match_string="__LDAP_PASSWORD__" --replace_string="$ldap_password" --target_file="../conf/ldap_message"
+ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="../conf/ldap_message"
+ynh_replace_string --match_string="__PATH_URL__" --replace_string="$path_url" --target_file="../conf/ldap_message"
 
 ynh_send_readme_to_admin --app_message="../conf/ldap_message" --recipients="root" --type='install'
 
