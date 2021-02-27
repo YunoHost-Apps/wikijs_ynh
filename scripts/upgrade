@@ -200,8 +200,8 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 ynh_script_progression --message="Sending ReadMe to admin..."
 
-ynh_add_config --template="../conf/ldap_message" --destination="../conf/upgrade"
-ynh_send_readme_to_admin --app_message="../conf/ldap_message" --recipients="root" --type='upgrade'
+ynh_add_config --template="../conf/ldap_message" --destination="../conf/message_upgrade"
+ynh_send_readme_to_admin --app_message="../conf/message_upgrade" --recipients="root" --type='upgrade'
 
 #=================================================
 # END OF SCRIPT
