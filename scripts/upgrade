@@ -19,10 +19,7 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
-
-is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-
 db_name=$(ynh_app_setting_get --app=$app --key=db_name)
 db_pwd=$(ynh_app_setting_get --app=$app --key=db_pwd)
 port=$(ynh_app_setting_get --app=$app --key=port)
@@ -40,27 +37,6 @@ upgrade_type=$(ynh_check_app_version_changed)
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..."
-
-# Fix is_public as a boolean value
-if [ "$is_public" = "Yes" ]; then
-	ynh_app_setting_set --app=$app --key=is_public --value=1
-	is_public=1
-elif [ "$is_public" = "No" ]; then
-	ynh_app_setting_set --app=$app --key=is_public --value=0
-	is_public=0
-fi
-
-# If db_name doesn't exist, create it
-if [ -z "$db_name" ]; then
-	db_name=$(ynh_sanitize_dbid --db_name=$app)
-	ynh_app_setting_set --app=$app --key=db_name --value=$db_name
-fi
-
-# If final_path doesn't exist, create it
-if [ -z "$final_path" ]; then
-	final_path=/var/www/$app
-	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-fi
 
 # If ldap_user doesn't exist, retrieve it or create it
 if [[ -z "$ldap_user" ]]; then
@@ -84,6 +60,13 @@ ynh_psql_create_user $db_name $db_pwd
 ynh_psql_test_if_first_run
 ynh_psql_execute_as_root --sql="CREATE EXTENSION IF NOT EXISTS pg_trgm;" --database=$db_name
 
+# Cleaning legacy permissions
+if ynh_legacy_permissions_exists; then
+	ynh_legacy_permissions_delete_all
+
+	ynh_app_setting_delete --app=$app --key=is_public
+fi
+
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
@@ -91,14 +74,9 @@ ynh_script_progression --message="Backing up the app before upgrading (may take 
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
-
-#Workaround to be remove in next version
-ynh_systemd_action --service_name=$app --action="start" --log_path=systemd --line_match="HTTP Server:"
-
 ynh_clean_setup () {
-	# restore it if the upgrade fails
+	# Restore it if the upgrade fails
 	ynh_restore_upgradebackup
-	ynh_clean_check_starting
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
@@ -124,24 +102,24 @@ then
 	tmpdir="$(mktemp -d)"
 
 	rsync -a "$config_file" "$tmpdir/."
-    if [ -d "$final_path/.ssh" ]; then
-	    rsync -a "$final_path/.ssh" "$tmpdir/."
-    fi
-    if [ -d "$final_path/data" ]; then
-	    rsync -a "$final_path/data" "$tmpdir/."
-    fi
+	if [ -d "$final_path/.ssh" ]; then
+		rsync -a "$final_path/.ssh" "$tmpdir/."
+	fi
+	if [ -d "$final_path/data" ]; then
+		rsync -a "$final_path/data" "$tmpdir/."
+	fi
 	ynh_secure_remove --file="$final_path"
 
 	# Download, check integrity, uncompress and patch the source from app.src
 	ynh_setup_source --dest_dir="$final_path"
 
 	rsync -a "$tmpdir/config.yml" "$final_path/."
-    if [ -d "$tmpdir/.ssh" ]; then
-	    rsync -a "$tmpdir/.ssh" "$final_path/."
-    fi
-    if [ -d "$tmpdir/data" ]; then
-	    rsync -a "$tmpdir/data" "$final_path/."
-    fi
+	if [ -d "$tmpdir/.ssh" ]; then
+		rsync -a "$tmpdir/.ssh" "$final_path/."
+	fi
+	if [ -d "$tmpdir/data" ]; then
+		rsync -a "$tmpdir/data" "$final_path/."
+	fi
 fi
 
 #=================================================
@@ -176,16 +154,7 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 #=================================================
 ynh_script_progression --message="Modifying a config file..."
 
-config_file="$final_path/config.yml"
-ynh_backup_if_checksum_is_different --file=$config_file
-cp -f ../conf/config.sample.yml $config_file
-
-ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$config_file"
-ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$config_file"
-ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$config_file"
-
-# Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum --file="$config_file"
+ynh_add_config --template="../conf/config.sample.yml" --destination="$final_path/config.yml"
 
 #=================================================
 # SETUP SYSTEMD
@@ -213,18 +182,6 @@ ynh_script_progression --message="Integrating service in YunoHost..."
 yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
 
 #=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Upgrading SSOwat configuration..."
-
-# Make app public if necessary
-if [ $is_public -eq 1 ]
-then
-	# unprotected_uris allows SSO credentials to be passed anyway
-	ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
-fi
-
-#=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..."
@@ -243,12 +200,8 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 ynh_script_progression --message="Sending ReadMe to admin..."
 
-ynh_replace_string --match_string="__LDAP_USER__"    --replace_string="$ldap_user"    --target_file="../conf/ldap_message"
-ynh_replace_string --match_string="__LDAP_PASSWORD__"    --replace_string="$ldap_password"    --target_file="../conf/ldap_message"
-ynh_replace_string --match_string="__DOMAIN__"    --replace_string="$domain"    --target_file="../conf/ldap_message"
-ynh_replace_string --match_string="__PATH_URL__"    --replace_string="$path_url"    --target_file="../conf/ldap_message"
-
-ynh_send_readme_to_admin --app_message="../conf/ldap_message" --recipients="root" --type='upgrade'
+ynh_add_config --template="../conf/ldap_message" --destination="../conf/message_upgrade"
+ynh_send_readme_to_admin --app_message="../conf/message_upgrade" --recipients="root" --type='upgrade'
 
 #=================================================
 # END OF SCRIPT
