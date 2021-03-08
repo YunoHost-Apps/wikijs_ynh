@@ -9,6 +9,7 @@
 source _common.sh
 source ynh_send_readme_to_admin__2
 source /usr/share/yunohost/helpers
+source ynh_install_nodejs
 
 #=================================================
 # MANAGE SCRIPT FAILURE
@@ -70,9 +71,8 @@ ynh_app_setting_set --app=$app --key=port --value=$port
 #=================================================
 ynh_script_progression --message="Installing dependencies..."
 
-ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
-ynh_use_nodejs
 ynh_install_app_dependencies $pkg_dependencies
+ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
@@ -96,6 +96,7 @@ ynh_script_progression --message="Setting up source files..."
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$final_path"
+ynh_use_nodejs
 
 #=================================================
 # NGINX CONFIGURATION

@@ -9,6 +9,7 @@
 source _common.sh
 source ynh_send_readme_to_admin__2
 source /usr/share/yunohost/helpers
+source ynh_install_nodejs
 
 #=================================================
 # LOAD SETTINGS
@@ -135,9 +136,9 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Upgrading dependencies..."
 
+ynh_install_app_dependencies $pkg_dependencies
 ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
 ynh_use_nodejs
-ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
