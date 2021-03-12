@@ -1,52 +1,17 @@
 #!/bin/bash
 
-nodenv_version=1.4.0
-node_build_version=4.9.32
-nodenv_aliases_version=2.0.2
+ynh_nodejs_try_bash_extension() {
+  if [ -x src/configure ]; then
+    src/configure && make -C src || {
+      echo "Optional bash extension failed to build, but things will still work normally."
+    }
+  fi
+}
+
 nodenv_install_dir="/opt/nodenv"
-node_version_path="$nodenv_install_dir/versions"
+nodejs_version_path="$nodenv_install_dir/versions"
 # NODENV_ROOT is the directory of nodenv, it needs to be loaded as a environment variable.
 export NODENV_ROOT="$nodenv_install_dir"
-
-# Install Node.js Version Management
-#
-# [internal]
-#
-# usage: ynh_install_nodenv
-#
-# Requires YunoHost version 2.7.12 or higher.
-ynh_install_nodenv () {
-    ynh_print_info --message="Installation of nodenv - Node.js Version Management - nodenv-${nodenv_version}/node-build-${node_build_version}"
-
-    # Build an app.src for nodenv
-    mkdir -p "../conf"
-    echo "SOURCE_URL=https://github.com/nodenv/nodenv/archive/v${nodenv_version}.tar.gz
-SOURCE_SUM=33e2f3e467219695ba114f75a7c769f3ee4e29b29c1c97a852aa001327ca9713" > "../conf/nodenv.src"
-    # Download and extract nodenv
-    ynh_setup_source --dest_dir="$nodenv_install_dir" --source_id=nodenv
-
-    # Build an app.src for node-build
-    mkdir -p "../conf"
-    echo "SOURCE_URL=https://github.com/nodenv/node-build/archive/v${node_build_version}.tar.gz
-SOURCE_SUM=e2c98e06f9fb31865d7e23be8d49b8adb5ed1ede1d16ec87b0e06865689ea718" > "../conf/node-build.src"
-    # Download and extract node-build
-    ynh_setup_source --dest_dir="$nodenv_install_dir/plugins/node-build" --source_id=node-build
-
-    # Build an app.src for nodenv-aliases
-    mkdir -p "../conf"
-    echo "SOURCE_URL=https://github.com/nodenv/nodenv-aliases/archive/v${nodenv_aliases_version}.tar.gz
-SOURCE_SUM=632193b462438c986c104edc95f5378c067e02f6f8d1a7be38d5017183ab0149" > "../conf/nodenv-aliases.src"
-    # Download and extract nodenv-aliases
-    ynh_setup_source --dest_dir="$nodenv_install_dir/plugins/nodenv-aliases" --source_id=nodenv-aliases
-
-    (cd $nodenv_install_dir
-    ./src/configure && make -C src)
-
-    # Create shims directory if needed
-    if [ ! -d $nodenv_install_dir/shims ] ; then
-        mkdir $nodenv_install_dir/shims
-    fi
-}
 
 # Load the version of Node.js for an app, and set variables.
 #
@@ -90,7 +55,7 @@ ynh_use_nodejs () {
     nodejs_version=$(ynh_app_setting_get --app=$app --key=nodejs_version)
 
     # Get the absolute path of this version of Node.js
-    nodejs_path="$node_version_path/$YNH_APP_INSTANCE_NAME/bin"
+    nodejs_path="$nodejs_version_path/$YNH_APP_INSTANCE_NAME/bin"
 
     # Allow alias to be used into bash script
     shopt -s expand_aliases
@@ -108,11 +73,12 @@ ynh_use_nodejs () {
     fi
     # Create an alias to easily load the PATH
     ynh_node_load_PATH="PATH=$PATH"
-    ynh_node_load_path="PATH=$PATH"
+    ynh_nodejs_load_path="PATH=$PATH"
 
     # Sets the local application-specific Node.js version
-    (cd $final_path
-    nodenv local $nodejs_version)
+    pushd $final_path
+        $nodenv_install_dir/bin/nodenv local $nodejs_version
+    popd
 }
 
 # Install a specific version of Node.js
@@ -142,12 +108,6 @@ ynh_install_nodejs () {
     # Manage arguments with getopts
     ynh_handle_getopts_args "$@"
 
-    # Store nodejs_version into the config of this app
-    ynh_app_setting_set --app=$YNH_APP_INSTANCE_NAME --key=nodejs_version --value=$nodejs_version
-
-    # Create $nodenv_install_dir if doesn't exist already
-    mkdir -p "$nodenv_install_dir/plugins/node-build"
-
     # Load nodenv path in PATH
     local CLEAR_PATH="$nodenv_install_dir/bin:$PATH"
 
@@ -158,17 +118,80 @@ ynh_install_nodejs () {
     test -x /usr/bin/node && mv /usr/bin/node /usr/bin/node_n
     test -x /usr/bin/npm && mv /usr/bin/npm /usr/bin/npm_n
 
-    # If nodenv is not previously setup, install it
-    if ! type nodenv > /dev/null 2>&1
-    then
-        ynh_install_nodenv
-    elif dpkg --compare-versions "$($nodenv_install_dir/bin/nodenv --version | cut -d" " -f2)" lt $nodenv_version
-    then
-        ynh_install_nodenv
-    elif dpkg --compare-versions "$($nodenv_install_dir/plugins/node-build/bin/node-build --version | cut -d" " -f2)" lt $node_build_version
-    then
-        ynh_install_nodenv
+    # Instal or update nodenv
+    nodenv="$(command -v nodenv $nodenv_install_dir/bin/nodenv | head -1)"
+    if [ -n "$nodenv" ]; then
+        ynh_print_info --message="nodenv already seems installed in \`$nodenv'."
+        pushd "${nodenv%/*/*}"
+            if git remote -v 2>/dev/null | grep -q nodenv; then
+                echo "Trying to update with git..."
+                git pull -q --tags origin master
+                cd ..
+                ynh_nodejs_try_bash_extension
+            fi
+        popd
+    else
+        ynh_print_info --message="Installing nodenv with git..."
+        mkdir -p $nodenv_install_dir
+        pushd $nodenv_install_dir
+            git init -q
+            git remote add -f -t master origin https://github.com/nodenv/nodenv.git > /dev/null 2>&1
+            git checkout -q -b master origin/master
+            ynh_nodejs_try_bash_extension
+            nodenv=$nodenv_install_dir/bin/nodenv
+        popd
     fi
+
+    node_build="$(command -v "$nodenv_install_dir"/plugins/*/bin/nodenv-install nodenv-install | head -1)"
+    if [ -n "$node_build" ]; then
+        ynh_print_info --message="\`nodenv install' command already available in \`$node_build'."
+        pushd "${node_build%/*/*}"
+            if git remote -v 2>/dev/null | grep -q node-build; then
+                ynh_print_info --message="Trying to update nodenv with git..."
+                git pull -q origin master
+            fi
+        popd
+    else
+        ynh_print_info --message="Installing node-build with git..."
+        mkdir -p "${nodenv_install_dir}/plugins"
+        git clone -q https://github.com/nodenv/node-build.git "${nodenv_install_dir}/plugins/node-build"
+    fi
+
+    nodenv_alias="$(command -v "$nodenv_install_dir"/plugins/*/bin/nodenv-alias nodenv-alias | head -1)"
+    if [ -n "$nodenv_alias" ]; then
+        ynh_print_info --message="\`nodenv alias' command already available in \`$nodenv_alias'."
+        pushd "${nodenv_alias%/*/*}"
+            if git remote -v 2>/dev/null | grep -q nodenv-aliases; then
+                ynh_print_info --message="Trying to update nodenv-aliases with git..."
+                git pull -q origin master
+            fi
+        popd
+    else
+        ynh_print_info --message="Installing nodenv-aliases with git..."
+        mkdir -p "${nodenv_install_dir}/plugins"
+        git clone -q https://github.com/nodenv/nodenv-aliases.git "${nodenv_install_dir}/plugins/nodenv-aliase"
+    fi
+
+    nodenv_latest="$(command -v "$nodenv_install_dir"/plugins/*/bin/nodenv-latest nodenv-latest | head -1)"
+    if [ -n "$nodenv_latest" ]; then
+        ynh_print_info --message="\`nodenv latest' command already available in \`$nodenv_latest'."
+        pushd "${nodenv_latest%/*/*}"
+            if git remote -v 2>/dev/null | grep -q xxenv-latest; then
+                ynh_print_info --message="Trying to update xxenv-latest with git..."
+                git pull -q origin master
+            fi
+        popd
+    else
+        ynh_print_info --message="Installing xxenv-latest with git..."
+        mkdir -p "${nodenv_install_dir}/plugins"
+        git clone -q https://github.com/momo-lab/xxenv-latest.git "${nodenv_install_dir}/plugins/xxenv-latest"
+    fi
+
+    # Enable caching
+    mkdir -p "${nodenv_install_dir}/cache"
+
+    # Create shims directory if needed
+    mkdir -p "${nodenv_install_dir}/shims"
 
     # Restore /usr/local/bin in PATH
     PATH=$CLEAR_PATH
@@ -178,11 +201,15 @@ ynh_install_nodejs () {
     test -x /usr/bin/npm_n && mv /usr/bin/npm_n /usr/bin/npm
 
     # Install the requested version of Node.js
-    ynh_print_info --message="Installation of Node.js-"$nodejs_version
-    nodenv install --skip-existing $nodejs_version
+    local final_nodejs_version=$(nodenv latest --print $nodejs_version)
+    ynh_print_info --message="Installation of Node.js-$nodejs_version"
+    nodenv install --skip-existing $final_nodejs_version > /dev/null 2>&1
+
+    # Store nodejs_version into the config of this app
+    ynh_app_setting_set --app=$YNH_APP_INSTANCE_NAME --key=nodejs_version --value=$final_nodejs_version
 
     # Remove app virtualenv
-    if  `nodenv alias --list | grep --quiet "$YNH_APP_INSTANCE_NAME" 1>/dev/null 2>&1`
+    if  `nodenv alias --list | grep --quiet "$YNH_APP_INSTANCE_NAME " 1>/dev/null 2>&1`
     then
         nodenv alias $YNH_APP_INSTANCE_NAME --remove
     fi
@@ -198,7 +225,7 @@ ynh_install_nodejs () {
 export NODENV_ROOT=$nodenv_install_dir
 export PATH=\"$nodenv_install_dir/bin:$PATH\"
 eval \"\$(nodenv init -)\"
-    #nodenv" > /etc/profile.d/nodenv.sh
+#nodenv" > /etc/profile.d/nodenv.sh
 
     # Load the environment
     eval "$(nodenv init -)"
@@ -236,7 +263,7 @@ ynh_remove_nodejs () {
 # usage: ynh_cleanup_nodejs
 ynh_cleanup_nodejs () {
 
-    # List required Node.js version
+    # List required Node.js versions
     local installed_apps=$(yunohost app list | grep -oP 'id: \K.*$')
     local required_nodejs_versions=""
     for installed_app in $installed_apps
@@ -248,13 +275,13 @@ ynh_cleanup_nodejs () {
         fi
     done
     
-    # Remove no more needed Node.js version
+    # Remove no more needed Node.js versions
     local installed_nodejs_versions=$(nodenv versions --bare --skip-aliases | grep -Ev '/')
     for installed_nodejs_version in $installed_nodejs_versions
     do
         if ! `echo ${required_nodejs_versions} | grep "${installed_nodejs_version}" 1>/dev/null 2>&1`
         then
-            ynh_print_info --message="Removing of Node.js-"$installed_nodejs_version
+            ynh_print_info --message="Removing of Node.js-$installed_nodejs_version"
             $nodenv_install_dir/bin/nodenv uninstall --force $installed_nodejs_version
         fi
     done
@@ -265,7 +292,7 @@ ynh_cleanup_nodejs () {
         # Remove nodenv environment configuration
         ynh_print_info --message="Removing of nodenv-"$nodenv_version
         ynh_secure_remove --file="$nodenv_install_dir"
-        rm /etc/profile.d/nodenv.sh
+        ynh_secure_remove --file="/etc/profile.d/nodenv.sh"
         
         # Remove previous n Version Management
         n_install_dir="/opt/node_n"
