@@ -3,7 +3,7 @@
 ynh_nodejs_try_bash_extension() {
   if [ -x src/configure ]; then
     src/configure && make -C src || {
-      echo "Optional bash extension failed to build, but things will still work normally."
+      ynh_print_info --message="Optional bash extension failed to build, but things will still work normally."
     }
   fi
 }
@@ -85,9 +85,6 @@ ynh_use_nodejs () {
 #
 # ynh_install_nodejs will install the version of Node.js provided as argument by using nodenv.
 #
-# nodenv (Node.js Version Management) stores the target Node.js version in a .nodejs_version file created in the target folder (using nodenv local <version>)
-# It then uses that information for every Node.js user that uses nodenv provided Node.js command
-#
 # This helper creates a /etc/profile.d/nodenv.sh that configures PATH environment for nodenv
 # for every LOGIN user, hence your user must have a defined shell (as opposed to /usr/sbin/nologin)
 #
@@ -118,7 +115,7 @@ ynh_install_nodejs () {
     test -x /usr/bin/node && mv /usr/bin/node /usr/bin/node_n
     test -x /usr/bin/npm && mv /usr/bin/npm /usr/bin/npm_n
 
-    # Instal or update nodenv
+    # Install or update nodenv
     nodenv="$(command -v nodenv $nodenv_install_dir/bin/nodenv | head -1)"
     if [ -n "$nodenv" ]; then
         ynh_print_info --message="nodenv already seems installed in \`$nodenv'."
