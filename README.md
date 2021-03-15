@@ -28,7 +28,7 @@ Wiki.js is a copylefted libre software, modern and powerful wiki app built on No
 ## Documentation
 
  * Official documentation: https://docs-beta.requarks.io/
- * YunoHost documentation: https://yunohost.org/#/app_wikijs
+ * YunoHost documentation: https://yunohost.org/en/app_wikijs
 
 ## YunoHost specific features
 
