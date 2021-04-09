@@ -40,8 +40,8 @@ The app can be used by multiple users.
 
 #### Supported architectures
 
-* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/wikijs%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/wikijs/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/wikijs%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/wikijs/)
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/wikijs.svg)](https://ci-apps.yunohost.org/ci/apps/wikijs/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/wikijs.svg)](https://ci-apps-arm.yunohost.org/ci/apps/wikijs/)
 
 ## Limitations
 
