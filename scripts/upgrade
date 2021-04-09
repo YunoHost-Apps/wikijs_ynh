@@ -91,6 +91,14 @@ ynh_script_progression --message="Stopping a systemd service..."
 ynh_systemd_action --service_name=$app --action="stop" --log_path=systemd --line_match="Stopped wikijs service"
 
 #=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Making sure dedicated system user exists..."
+
+# Create a dedicated user (if not existing)
+ynh_system_user_create --username=$app --home_dir="$final_path"
+
+#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 
@@ -122,12 +130,16 @@ then
 	fi
 fi
 
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R root:$app "$final_path"
+
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
 ynh_script_progression --message="Upgrading NGINX web server configuration..."
 
-# Create a dedicated nginx config
+# Create a dedicated NGINX config
 ynh_add_nginx_config
 
 #=================================================
@@ -140,22 +152,7 @@ ynh_use_nodejs
 ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..."
-
-# Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir="$final_path"
-
-#=================================================
 # SPECIFIC UPGRADE
-#=================================================
-# MODIFY A CONFIG FILE
-#=================================================
-ynh_script_progression --message="Modifying a config file..."
-
-ynh_add_config --template="../conf/config.sample.yml" --destination="$final_path/config.yml"
-
 #=================================================
 # SETUP SYSTEMD
 #=================================================
@@ -165,15 +162,17 @@ ynh_script_progression --message="Upgrading systemd configuration..."
 ynh_add_systemd_config --others_var="ynh_node ynh_node_load_PATH"
 
 #=================================================
+# UPDATE A CONFIG FILE
+#=================================================
+ynh_script_progression --message="Updating a config file..."
+
+ynh_add_config --template="../conf/config.sample.yml" --destination="$final_path/config.yml"
+
+chmod 400 "$final_path/config.yml"
+chown $app:$app "$final_path/config.yml"
+
+#=================================================
 # GENERIC FINALIZATION
-#=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-ynh_script_progression --message="Securing files and directories..."
-
-# Set permissions on app files
-chown -R "$app":"$app" "$final_path"
-
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================

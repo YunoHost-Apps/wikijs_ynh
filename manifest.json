@@ -6,7 +6,7 @@
         "en": "An open source, modern and powerful wiki app built on Node.js, Git and Markdown.",
         "fr": "Un wiki moderne et open source propulsé Node.js, Git et Markdown."
     },
-    "version": "2.5.201~ynh1",
+    "version": "2.5.201~ynh2",
     "url": "https://wiki.js.org/",
     "license": "AGPL-3.0-or-later",
     "maintainer": {
@@ -24,19 +24,11 @@
             {
                 "name": "domain",
                 "type": "domain",
-                "ask": {
-                    "en": "Choose a domain name for Wiki.js",
-                    "fr": "Choisissez un nom de domaine pour Wiki.js"
-                },
                 "example": "example.com"
             },
             {
                 "name": "is_public",
                 "type": "boolean",
-                "ask": {
-                    "en": "Is it a public application?",
-                    "fr": "Est-ce une application publique ?"
-                },
                 "default": true
             }
         ]
