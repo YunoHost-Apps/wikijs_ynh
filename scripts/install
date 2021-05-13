@@ -129,7 +129,7 @@ yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikij
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding a config file..."
+ynh_script_progression --message="Adding a configuration file..."
 
 ynh_add_config --template="../conf/config.sample.yml" --destination="$final_path/config.yml"
 

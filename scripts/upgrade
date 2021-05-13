@@ -54,7 +54,7 @@ ynh_abort_if_errors
 #=================================================
 ynh_script_progression --message="Stopping a systemd service..."
 
-ynh_systemd_action --service_name=$app --action=stop --log_path=systemd --line_match="Stopped wikijs service"
+ynh_systemd_action --service_name=$app --action="stop" --log_path=systemd --line_match="Stopped wikijs service"
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -163,7 +163,7 @@ ynh_install_app_dependencies $pkg_dependencies
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression --message="Updating a config file..."
+ynh_script_progression --message="Updating a configuration file..."
 
 ynh_add_config --template="../conf/config.sample.yml" --destination="$final_path/config.yml"
 
