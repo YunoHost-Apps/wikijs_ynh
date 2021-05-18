@@ -72,17 +72,7 @@ ynh_send_readme_to_admin() {
 
 Specific information for the application $app.
 
-$(if [ -n "$app_message" ]
-then
-	cat "$app_message"
-else
-	echo "...No specific information..."
-fi)
-
----
-Automatic diagnosis data from YunoHost
-
-__PRE_TAG1__$(yunohost tools diagnosis | grep -B 100 "services:" | sed '/services:/d')__PRE_TAG2__"
+$(cat "$app_message")"
 
 	# Store the message into a file for further modifications.
 	echo "$mail_message" > mail_to_send
@@ -103,10 +93,6 @@ __PRE_TAG1__$(yunohost tools diagnosis | grep -B 100 "services:" | sed '/service
 		# Insert url links tags
 		ynh_replace_string "__URL_TAG1__\(.*\)__URL_TAG2__\(.*\)__URL_TAG3__" "<a href=\"\2\">\1</a>" mail_to_send
 
-		# Insert pre tags
-		ynh_replace_string "__PRE_TAG1__" "<pre>" mail_to_send
-		ynh_replace_string "__PRE_TAG2__" "<\pre>" mail_to_send
-
 		# Insert finishing HTML tags
 		echo -e "\n</body>\n</html>" >> mail_to_send
 
@@ -115,9 +101,6 @@ __PRE_TAG1__$(yunohost tools diagnosis | grep -B 100 "services:" | sed '/service
 		# Remove URL tags
 		ynh_replace_string "__URL_TAG[1,3]__" "" mail_to_send
 		ynh_replace_string "__URL_TAG2__" ": " mail_to_send
-
-		# Remove PRE tags
-		ynh_replace_string "__PRE_TAG[1-2]__" "" mail_to_send
 	fi
 
 	# Define binary to use for mail command
