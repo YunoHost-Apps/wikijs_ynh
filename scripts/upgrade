@@ -34,40 +34,6 @@ ynh_script_progression --message="Checking version..."
 upgrade_type=$(ynh_check_app_version_changed)
 
 #=================================================
-# ENSURE DOWNWARD COMPATIBILITY
-#=================================================
-ynh_script_progression --message="Ensuring downward compatibility..."
-
-# If ldap_user doesn't exist, retrieve it or create it
-if [[ -z "$ldap_user" ]]; then
-	ldap_user="svc_${app}_ldap"
-	ldap_password=$(ynh_string_random --length=8)
-	ynh_app_setting_set "$app" ldap_user "$ldap_user"
-	ynh_app_setting_set "$app" ldap_password "$ldap_password"
-	yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --mail ${ldap_user}@$domain --password $ldap_password -q 0
-fi
-
-# Remove yarn repository
-ynh_secure_remove --file="/etc/apt/sources.list.d/yarn.list"
-
-# Remove old log file
-ynh_secure_remove --file="/var/log/$app/"
-
-# Create PostgreSQL User
-ynh_psql_create_user $db_name $db_pwd
-
-# Install pg_trgm extension to provide a PostgreSQL search solution
-ynh_psql_test_if_first_run
-ynh_psql_execute_as_root --sql="CREATE EXTENSION IF NOT EXISTS pg_trgm;" --database=$db_name
-
-# Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
-
-	ynh_app_setting_delete --app=$app --key=is_public
-fi
-
-#=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
 ynh_script_progression --message="Backing up the app before upgrading (may take a while)..."
@@ -89,6 +55,47 @@ ynh_abort_if_errors
 ynh_script_progression --message="Stopping a systemd service..."
 
 ynh_systemd_action --service_name=$app --action="stop" --log_path=systemd --line_match="Stopped wikijs service"
+
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+ynh_script_progression --message="Ensuring downward compatibility..."
+
+# If ldap_user doesn't exist, retrieve it or create it
+if [[ -z "$ldap_user" ]]; then
+	ldap_user="svc_${app}_ldap"
+	ldap_password=$(ynh_string_random --length=8)
+	ynh_app_setting_set "$app" ldap_user "$ldap_user"
+	ynh_app_setting_set "$app" ldap_password "$ldap_password"
+	yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --mail ${ldap_user}@$domain --password $ldap_password -q 0
+fi
+
+# Cleaning legacy permissions
+if ynh_legacy_permissions_exists; then
+	ynh_legacy_permissions_delete_all
+
+	ynh_app_setting_delete --app=$app --key=is_public
+fi
+
+# Remove yarn repository
+ynh_secure_remove --file="/etc/apt/sources.list.d/yarn.list"
+
+# Remove old log file
+ynh_secure_remove --file="/var/log/$app/"
+
+# Create PostgreSQL User
+ynh_psql_create_user $db_name $db_pwd
+
+# Install pg_trgm extension to provide a PostgreSQL search solution
+ynh_psql_test_if_first_run
+ynh_psql_execute_as_root --sql="CREATE EXTENSION IF NOT EXISTS pg_trgm;" --database=$db_name
+
+# Cleaning legacy permissions
+if ynh_legacy_permissions_exists; then
+	ynh_legacy_permissions_delete_all
+
+	ynh_app_setting_delete --app=$app --key=is_public
+fi
 
 #=================================================
 # CREATE DEDICATED USER
@@ -156,7 +163,7 @@ ynh_install_app_dependencies $pkg_dependencies
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression --message="Updating a config file..."
+ynh_script_progression --message="Updating a configuration file..."
 
 ynh_add_config --template="../conf/config.sample.yml" --destination="$final_path/config.yml"
 
@@ -169,7 +176,7 @@ chown $app:$app "$final_path/config.yml"
 ynh_script_progression --message="Upgrading systemd configuration..."
 
 # Create a dedicated systemd config
-ynh_add_systemd_config --others_var="ynh_node ynh_node_load_PATH"
+ynh_add_systemd_config
 
 #=================================================
 # GENERIC FINALIZATION
