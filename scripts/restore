@@ -51,7 +51,7 @@ test ! -d $final_path \
 #=================================================
 # RESTORE THE NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Restoring the NGINX configuration..."
+ynh_script_progression --message="Restoring the NGINX web server configuration..."
 
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
@@ -61,7 +61,7 @@ ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 ynh_script_progression --message="Recreating the dedicated system user..."
 
 # Create the dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir="$final_path"
+ynh_system_user_create --username=$app --home_dir=$final_path
 
 #=================================================
 # RESTORE THE APP MAIN DIR
@@ -82,9 +82,9 @@ chown -R $app:$app "$final_path"
 ynh_script_progression --message="Reinstalling dependencies..."
 
 # Define and install dependencies
+ynh_install_app_dependencies $pkg_dependencies
 ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
 ynh_use_nodejs
-ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # RESTORE THE POSTGRESQL DATABASE
@@ -123,7 +123,7 @@ ynh_systemd_action --service_name=$app --action="start" --log_path=systemd --lin
 #=================================================
 ynh_script_progression --message="Creating LDAP user..."
 
-yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --mail ${ldap_user}@$domain --password $ldap_password -q 0
+yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
 
 #=================================================
 # GENERIC FINALIZATION

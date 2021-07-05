@@ -67,7 +67,7 @@ if [[ -z "$ldap_user" ]]; then
 	ldap_password=$(ynh_string_random --length=8)
 	ynh_app_setting_set "$app" ldap_user "$ldap_user"
 	ynh_app_setting_set "$app" ldap_password "$ldap_password"
-	yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --mail ${ldap_user}@$domain --password $ldap_password -q 0
+	yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
 fi
 
 # Cleaning legacy permissions
@@ -103,7 +103,7 @@ fi
 ynh_script_progression --message="Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir="$final_path"
+ynh_system_user_create --username=$app --home_dir=$final_path
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -154,9 +154,9 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Upgrading dependencies..."
 
+ynh_install_app_dependencies $pkg_dependencies
 ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
 ynh_use_nodejs
-ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # SPECIFIC UPGRADE

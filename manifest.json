@@ -8,6 +8,14 @@
     },
     "version": "2.5.201~ynh3",
     "url": "https://wiki.js.org/",
+    "upstream": {
+        "license": "AGPL-3.0-or-later",
+        "website": "https://wiki.js.org/",
+        "demo": "https://docs-beta.requarks.io/",
+        "admindoc": "https://yunohost.org/en/app_wikijs",
+        "userdoc": "https://docs-beta.requarks.io/",
+        "code": "https://github.com/Requarks/wiki"
+    },
     "license": "AGPL-3.0-or-later",
     "maintainer": {
         "name": "yalh76"
