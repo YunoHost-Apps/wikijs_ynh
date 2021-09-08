@@ -3,8 +3,8 @@
     "id": "wikijs",
     "packaging_format": 1,
     "description": {
-        "en": "Open source, modern and powerful wiki app built on Node.js, Git and Markdown.",
-        "fr": "Wiki moderne et open source propulsé Node.js, Git et Markdown."
+        "en": "Open source powerful wiki app built on Node.js, Git and Markdown",
+        "fr": "Wiki open source propulsé par Node.js, Git et Markdown"
     },
     "version": "2.5.201~ynh3",
     "url": "https://wiki.js.org/",
