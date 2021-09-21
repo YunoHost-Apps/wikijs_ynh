@@ -17,7 +17,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Open source, modern and powerful wiki app built on Node.js, Git and Markdown.
 
-**Shipped version:** 2.5.201~ynh3
+**Shipped version:** 2.5.214~ynh1
 
 **Demo:** https://docs-beta.requarks.io/
 
