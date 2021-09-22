@@ -36,6 +36,8 @@
 		#upgrade=1	from_commit=bce2bfa3f9f0e28ffdde79df17a34bd5302559ea
 		# 2.5.201~ynh2
 		#upgrade=1	from_commit=17ee20b13ba56babe0231b3f9bd87e9118908838
+		# 2.5.201~ynh3
+		upgrade=1	from_commit=16d047d802582d0d6db6d0d7343bd1fc0fb2eebf
 		backup_restore=1
 		multi_instance=1
 		port_already_use=0
@@ -70,3 +72,5 @@ Notification=yes
 		name=2.5.201~ynh1
 	; commit=17ee20b13ba56babe0231b3f9bd87e9118908838
 		name=2.5.201~ynh2
+	; commit=16d047d802582d0d6db6d0d7343bd1fc0fb2eebf
+		name=2.5.201~ynh3
