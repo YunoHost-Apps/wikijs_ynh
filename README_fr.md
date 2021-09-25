@@ -13,7 +13,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Wiki moderne et open source propulsé Node.js, Git et Markdown.
 
-**Version incluse :** 2.5.201~ynh3
+**Version incluse :** 2.5.214~ynh1
 
 **Démo :** https://docs-beta.requarks.io/
 
