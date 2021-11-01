@@ -11,7 +11,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 ## Vue d'ensemble
 
-Wiki moderne et open source propulsé Node.js, Git et Markdown.
+Wiki open source propulsé par Node.js, Git et Markdown
 
 **Version incluse :** 2.5.219~ynh1
 
