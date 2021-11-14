@@ -15,9 +15,9 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 ## Overview
 
-Open source, modern and powerful wiki app built on Node.js, Git and Markdown.
+Open source powerful wiki app built on Node.js, Git and Markdown
 
-**Shipped version:** 2.5.219~ynh1
+**Shipped version:** 2.5.219~ynh2
 
 **Demo:** https://docs-beta.requarks.io/
 
