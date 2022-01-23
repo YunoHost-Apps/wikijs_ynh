@@ -44,6 +44,8 @@
 		upgrade=1	from_commit=8d478fadb941f2d8d4407f90cb3ae7e939ff8924
 		# 2.5.219~ynh2
 		upgrade=1	from_commit=b59ca572505eb6b4b4f29596100c68808ec143cd
+		# 2.5.268~ynh1
+		upgrade=1	from_commit=de01b48bfee4abff5edcf2fd288d3ff930ccc45a
 		backup_restore=1
 		multi_instance=1
 		port_already_use=0
@@ -86,3 +88,5 @@ Notification=yes
 		name=2.5.219~ynh1
 	; commit=b59ca572505eb6b4b4f29596100c68808ec143cd
 		name=2.5.219~ynh2
+	; commit=de01b48bfee4abff5edcf2fd288d3ff930ccc45a
+		name=2.5.268~ynh1
