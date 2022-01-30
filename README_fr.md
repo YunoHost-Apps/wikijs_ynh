@@ -14,9 +14,9 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 Wiki.js is a copylefted libre software, modern and powerful wiki app built on Node.js, Git and Markdown for YunoHost.
 
 
-**Version incluse :** 2.5.272~ynh1
+**Version incluse :** 2.5.274~ynh1
 
-**Démo :** https://docs-beta.requarks.io/
+**Démo :** https://docs-beta.requarks.io/
 
 ## Captures d'écran
 
@@ -31,12 +31,12 @@ Wiki.js is a copylefted libre software, modern and powerful wiki app built on No
 
 ## Documentations et ressources
 
-* Site officiel de l'app : https://wiki.js.org/
-* Documentation officielle utilisateur : https://docs-beta.requarks.io/
-* Documentation officielle de l'admin : https://yunohost.org/en/app_wikijs
-* Dépôt de code officiel de l'app : https://github.com/Requarks/wiki
-* Documentation YunoHost pour cette app : https://yunohost.org/app_wikijs
-* Signaler un bug : https://github.com/YunoHost-Apps/wikijs_ynh/issues
+* Site officiel de l'app : https://wiki.js.org/
+* Documentation officielle utilisateur : https://docs-beta.requarks.io/
+* Documentation officielle de l'admin : https://yunohost.org/en/app_wikijs
+* Dépôt de code officiel de l'app : https://github.com/Requarks/wiki
+* Documentation YunoHost pour cette app : https://yunohost.org/app_wikijs
+* Signaler un bug : https://github.com/YunoHost-Apps/wikijs_ynh/issues
 
 ## Informations pour les développeurs
 
@@ -49,4 +49,4 @@ ou
 sudo yunohost app upgrade wikijs -u https://github.com/YunoHost-Apps/wikijs_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications :** https://yunohost.org/packaging_apps
+**Plus d'infos sur le packaging d'applications :** https://yunohost.org/packaging_apps
