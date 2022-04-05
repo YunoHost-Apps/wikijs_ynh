@@ -73,6 +73,15 @@ ynh_script_progression --message="Installing dependencies..."
 
 ynh_install_app_dependencies $pkg_dependencies
 ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
+ynh_use_nodejs
+
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..."
+
+# Create a system user
+ynh_system_user_create --username=$app --home_dir=$final_path
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
@@ -98,6 +107,10 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 ynh_setup_source --dest_dir="$final_path"
 ynh_use_nodejs
 
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:$app "$final_path"
+
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
@@ -107,21 +120,23 @@ ynh_script_progression --message="Configuring NGINX web server..."
 ynh_add_nginx_config
 
 #=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..."
-
-# Create a system user
-ynh_system_user_create --username=$app --home_dir="$final_path"
-
-#=================================================
 # SPECIFIC SETUP
 #=================================================
 # CREATE LDAP USER
 #=================================================
 ynh_script_progression --message="Creating LDAP user..."
 
-yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --mail ${ldap_user}@$domain --password $ldap_password -q 0
+yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
+
+#=================================================
+# ADD A CONFIGURATION
+#=================================================
+ynh_script_progression --message="Adding a configuration file..."
+
+ynh_add_config --template="../conf/config.sample.yml" --destination="$final_path/config.yml"
+
+chmod 400 "$final_path/config.yml"
+chown $app:$app "$final_path/config.yml"
 
 #=================================================
 # SETUP SYSTEMD
@@ -129,25 +144,10 @@ yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikij
 ynh_script_progression --message="Configuring a systemd service..."
 
 # Create a dedicated systemd config
-ynh_add_systemd_config --others_var="ynh_node ynh_node_load_PATH"
-
-#=================================================
-# MODIFY A CONFIG FILE
-#=================================================
-ynh_script_progression --message="Modifying a config file..."
-
-ynh_add_config --template="../conf/config.sample.yml" --destination="$final_path/config.yml"
+ynh_add_systemd_config
 
 #=================================================
 # GENERIC FINALIZATION
-#=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-ynh_script_progression --message="Securing files and directories..."
-
-# Set permissions to app files
-chown -R "$app":"$app" "$final_path"
-
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
@@ -171,8 +171,6 @@ ynh_script_progression --message="Configuring permissions..."
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-	# Everyone can access the app.
-	# The "main" permission is automatically created before the install script.
 	ynh_permission_update --permission="main" --add="visitors"
 fi
 

@@ -3,40 +3,39 @@
     "id": "wikijs",
     "packaging_format": 1,
     "description": {
-        "en": "An open source, modern and powerful wiki app built on Node.js, Git and Markdown.",
-        "fr": "Un wiki moderne et open source propulsé Node.js, Git et Markdown."
+        "en": "Open source powerful wiki app built on Node.js, Git and Markdown",
+        "fr": "Wiki open source propulsé par Node.js, Git et Markdown"
     },
-    "version": "2.5.170~ynh2",
+    "version": "2.5.277~ynh1",
     "url": "https://wiki.js.org/",
+    "upstream": {
+        "license": "AGPL-3.0-or-later",
+        "website": "https://wiki.js.org/",
+        "demo": "https://docs-beta.requarks.io/",
+        "admindoc": "https://yunohost.org/en/app_wikijs",
+        "userdoc": "https://docs-beta.requarks.io/",
+        "code": "https://github.com/Requarks/wiki"
+    },
     "license": "AGPL-3.0-or-later",
     "maintainer": {
         "name": "yalh76"
     },
     "requirements": {
-        "yunohost": ">= 4.1.7.3"
+        "yunohost": ">= 4.3.0"
     },
     "multi_instance": true,
     "services": [
         "nginx"
     ],
     "arguments": {
-        "install" : [
+        "install": [
             {
                 "name": "domain",
-                "type": "domain",
-                "ask": {
-                    "en": "Choose a domain name for Wiki.js",
-                    "fr": "Choisissez un nom de domaine pour Wiki.js"
-                },
-                "example": "example.com"
+                "type": "domain"
             },
             {
                 "name": "is_public",
                 "type": "boolean",
-                "ask": {
-                    "en": "Is it a public application?",
-                    "fr": "Est-ce une application publique ?"
-                },
                 "default": true
             }
         ]
