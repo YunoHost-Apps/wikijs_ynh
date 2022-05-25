@@ -5,7 +5,7 @@ It shall NOT be edited by hand.
 
 # Wiki.js pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/wikijs.svg)](https://dash.yunohost.org/appci/app/wikijs) ![Status du fonctionnement](https://ci-apps.yunohost.org/ci/badges/wikijs.status.svg) ![Status de maintenance](https://ci-apps.yunohost.org/ci/badges/wikijs.maintain.svg)  
+[![Niveau d'intégration](https://dash.yunohost.org/integration/wikijs.svg)](https://dash.yunohost.org/appci/app/wikijs) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/wikijs.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/wikijs.maintain.svg)  
 [![Installer Wiki.js avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=wikijs)
 
 *[Read this readme in english.](./README.md)*
