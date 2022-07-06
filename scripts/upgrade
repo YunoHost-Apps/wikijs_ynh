@@ -41,6 +41,7 @@ ynh_script_progression --message="Backing up the app before upgrading (may take 
 # Backup the current version of the app
 ynh_backup_before_upgrade
 ynh_clean_setup () {
+	ynh_clean_check_starting
 	# Restore it if the upgrade fails
 	ynh_restore_upgradebackup
 }
@@ -77,6 +78,8 @@ if ynh_legacy_permissions_exists; then
 	ynh_app_setting_delete --app=$app --key=is_public
 fi
 
+ynh_permission_url --permission="main" --auth_header=false
+
 # Remove yarn repository
 ynh_secure_remove --file="/etc/apt/sources.list.d/yarn.list"
 
@@ -103,7 +106,7 @@ fi
 ynh_script_progression --message="Making sure dedicated system user exists..."
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir=$final_path
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -142,22 +145,21 @@ chmod -R o-rwx "$final_path"
 chown -R $app:$app "$final_path"
 
 #=================================================
+# UPGRADE DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Upgrading dependencies..."
+
+ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
+ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
+ynh_use_nodejs
+
+#=================================================
 # NGINX CONFIGURATION
 #=================================================
 ynh_script_progression --message="Upgrading NGINX web server configuration..."
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
-
-#=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Upgrading dependencies..."
-
-ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
-ynh_remove_nodejs
-ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
-ynh_use_nodejs
 
 #=================================================
 # SPECIFIC UPGRADE

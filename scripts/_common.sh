@@ -7,7 +7,7 @@
 # dependencies used by the app
 pkg_dependencies="postgresql postgresql-contrib"
 
-NODEJS_VERSION=16
+nodejs_version=16
 
 #=================================================
 # PERSONAL HELPERS
