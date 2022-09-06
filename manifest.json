@@ -6,13 +6,12 @@
         "en": "Open source powerful wiki app built on Node.js, Git and Markdown",
         "fr": "Wiki open source propulsé par Node.js, Git et Markdown"
     },
-    "version": "2.5.286~ynh1",
+    "version": "2.5.287~ynh1",
     "url": "https://wiki.js.org/",
     "upstream": {
         "license": "AGPL-3.0-or-later",
         "website": "https://wiki.js.org/",
         "demo": "https://docs-beta.requarks.io/",
-        "admindoc": "https://yunohost.org/en/app_wikijs",
         "userdoc": "https://docs-beta.requarks.io/",
         "code": "https://github.com/Requarks/wiki"
     },
