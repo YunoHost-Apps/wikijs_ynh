@@ -12,7 +12,6 @@
         "license": "AGPL-3.0-or-later",
         "website": "https://wiki.js.org/",
         "demo": "https://docs-beta.requarks.io/",
-        "admindoc": "https://yunohost.org/en/app_wikijs",
         "userdoc": "https://docs-beta.requarks.io/",
         "code": "https://github.com/Requarks/wiki"
     },
