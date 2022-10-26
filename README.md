@@ -20,7 +20,6 @@ Wiki.js is a copylefted libre software, modern and powerful wiki app built on No
 
 **Shipped version:** 2.5.289~ynh1
 
-
 **Demo:** https://docs-beta.requarks.io/
 
 ## Screenshots
