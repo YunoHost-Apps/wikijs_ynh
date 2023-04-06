@@ -8,8 +8,8 @@ User=__APP__
 Group=__APP__
 Environment=__YNH_NODE_LOAD_PATH__
 Environment=NODE_ENV=production
-WorkingDirectory=__FINALPATH__
-ExecStart=__YNH_NODE__ __FINALPATH__/server
+WorkingDirectory=__INSTALL_DIR__
+ExecStart=__YNH_NODE__ __INSTALL_DIR__/server
 Restart=always
 
 # Sandboxing options to harden security
