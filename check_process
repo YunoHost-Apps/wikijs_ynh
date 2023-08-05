@@ -48,10 +48,12 @@
 		upgrade=1	from_commit=de01b48bfee4abff5edcf2fd288d3ff930ccc45a
 		# 2.5.272~ynh1
 		upgrade=1	from_commit=0721e06b03c1fa384adcade256b1d67c9462d61e
+		# 2.5.299~ynh1
+		upgrade=1	from_commit=562dde836f45847aaf53caa6a4e77c24377d6b76
 		backup_restore=1
 		multi_instance=1
 		port_already_use=0
-		change_url=1
+		change_url=0
 ;;; Options
 Email=
 Notification=none
