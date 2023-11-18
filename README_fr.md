@@ -32,7 +32,7 @@ Wiki.js is a copylefted libre software, modern and powerful wiki app built on No
 * Site officiel de l’app : <https://wiki.js.org/>
 * Documentation officielle utilisateur : <https://docs-beta.requarks.io/>
 * Dépôt de code officiel de l’app : <https://github.com/Requarks/wiki>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_wikijs>
+* YunoHost Store: <https://apps.yunohost.org/app/wikijs>
 * Signaler un bug : <https://github.com/YunoHost-Apps/wikijs_ynh/issues>
 
 ## Informations pour les développeurs
