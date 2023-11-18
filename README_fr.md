@@ -19,7 +19,7 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 Wiki.js is a copylefted libre software, modern and powerful wiki app built on Node.js, Git and Markdown for YunoHost.
 
 
-**Version incluse :** 2.5.298~ynh1
+**Version incluse :** 2.5.300~ynh2
 
 **Démo :** https://docs-beta.requarks.io/
 
@@ -32,7 +32,7 @@ Wiki.js is a copylefted libre software, modern and powerful wiki app built on No
 * Site officiel de l’app : <https://wiki.js.org/>
 * Documentation officielle utilisateur : <https://docs-beta.requarks.io/>
 * Dépôt de code officiel de l’app : <https://github.com/Requarks/wiki>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_wikijs>
+* YunoHost Store: <https://apps.yunohost.org/app/wikijs>
 * Signaler un bug : <https://github.com/YunoHost-Apps/wikijs_ynh/issues>
 
 ## Informations pour les développeurs
