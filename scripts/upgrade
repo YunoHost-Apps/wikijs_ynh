@@ -89,6 +89,11 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..."
 # Create a dedicated NGINX config
 ynh_add_nginx_config
 
+# Create a dedicated systemd config
+ynh_add_systemd_config
+
+yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
+
 #=================================================
 # SPECIFIC UPGRADE
 #=================================================
@@ -100,23 +105,6 @@ ynh_add_config --template="config.sample.yml" --destination="$install_dir/config
 
 chmod 400 "$install_dir/config.yml"
 chown $app:$app "$install_dir/config.yml"
-
-#=================================================
-# SETUP SYSTEMD
-#=================================================
-ynh_script_progression --message="Upgrading systemd configuration..."
-
-# Create a dedicated systemd config
-ynh_add_systemd_config
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..."
-
-yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
