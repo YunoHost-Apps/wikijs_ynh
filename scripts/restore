@@ -17,7 +17,6 @@ ynh_script_progression --message="Restoring the app main directory..."
 
 ynh_restore_file --origin_path="$install_dir"
 
-
 chmod -R o-rwx "$install_dir"
 chown -R $app:$app "$install_dir"
 
@@ -75,13 +74,6 @@ yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/lo
 ynh_script_progression --message="Starting a systemd service..."
 
 ynh_systemd_action --service_name=$app --action="start" --log_path=systemd --line_match="HTTP Server:"
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression --message="Reloading NGINX web server..."
 
 ynh_systemd_action --service_name=nginx --action=reload
 

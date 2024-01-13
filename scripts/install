@@ -50,12 +50,17 @@ chmod -R o-rwx "$install_dir"
 chown -R $app:$app "$install_dir"
 
 #=================================================
-# NGINX CONFIGURATION
+# SETUP SYSTEMD
 #=================================================
-ynh_script_progression --message="Configuring NGINX web server..."
+ynh_script_progression --message="Configuring a systemd service..."
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
+
+# Create a dedicated systemd config
+ynh_add_systemd_config
+
+yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
 
 #=================================================
 # SPECIFIC SETUP
@@ -71,27 +76,10 @@ yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikij
 #=================================================
 ynh_script_progression --message="Adding a configuration file..."
 
-ynh_add_config --template="../conf/config.sample.yml" --destination="$install_dir/config.yml"
+ynh_add_config --template="config.sample.yml" --destination="$install_dir/config.yml"
 
 chmod 400 "$install_dir/config.yml"
 chown $app:$app "$install_dir/config.yml"
-
-#=================================================
-# SETUP SYSTEMD
-#=================================================
-ynh_script_progression --message="Configuring a systemd service..."
-
-# Create a dedicated systemd config
-ynh_add_systemd_config
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..."
-
-yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE

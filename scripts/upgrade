@@ -38,17 +38,6 @@ if [[ -z "$ldap_user" ]]; then
 	yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
 fi
 
-
-ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-#REMOVEME? ynh_script_progression --message="Making sure dedicated system user exists..."
-
-# Create a dedicated user (if not existing)
-#REMOVEME? ynh_system_user_create --username=$app --home_dir="$install_dir"
-
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
@@ -81,7 +70,6 @@ then
 	fi
 fi
 
-chmod 750 "$install_dir"
 chmod -R o-rwx "$install_dir"
 chown -R $app:$app "$install_dir"
 
@@ -108,7 +96,7 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Updating a configuration file..."
 
-ynh_add_config --template="../conf/config.sample.yml" --destination="$install_dir/config.yml"
+ynh_add_config --template="config.sample.yml" --destination="$install_dir/config.yml"
 
 chmod 400 "$install_dir/config.yml"
 chown $app:$app "$install_dir/config.yml"
