@@ -11,6 +11,15 @@ source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
+# REINSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Reinstalling NodeJS..."
+
+# Define and install dependencies
+ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
+ynh_use_nodejs
+
+#=================================================
 # RESTORE THE APP MAIN DIR
 #=================================================
 ynh_script_progression --message="Restoring the app main directory..."
@@ -18,25 +27,7 @@ ynh_script_progression --message="Restoring the app main directory..."
 ynh_restore_file --origin_path="$install_dir"
 
 chmod -R o-rwx "$install_dir"
-chown -R $app:$app "$install_dir"
-
-#=================================================
-# SPECIFIC RESTORATION
-#=================================================
-# REINSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Reinstalling dependencies..."
-
-# Define and install dependencies
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
-ynh_use_nodejs
-
-#=================================================
-# RESTORE THE NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Restoring the NGINX web server configuration..."
-
-ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
+chown -R "$app:$app" "$install_dir"
 
 #=================================================
 # RESTORE THE POSTGRESQL DATABASE
@@ -47,28 +38,24 @@ ynh_psql_execute_as_root --sql="CREATE EXTENSION IF NOT EXISTS pg_trgm;" --datab
 ynh_psql_execute_file_as_root --file="./db.sql" --database="$db_name"
 
 #=================================================
-# CREATE LDAP USER
+# RESTORE SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Creating LDAP user..."
+ynh_script_progression --message="Restoring system configurations related to $app..." --weight=1
 
-yunohost user create $ldap_user --fullname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
-
-#=================================================
-# RESTORE SYSTEMD
-#=================================================
-ynh_script_progression --message="Restoring the systemd configuration..."
+ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
 ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
-systemctl enable $app.service --quiet
+systemctl enable "$app.service" --quiet
+yunohost service add "$app" --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
 
-yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
+yunohost user create "$ldap_user" --fullname "SvcWikijsLdap" --domain "$domain" --password "$ldap_password" -q 0
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..."
 
-ynh_systemd_action --service_name=$app --action="start" --log_path=systemd --line_match="HTTP Server:"
+ynh_systemd_action --service_name="$app" --action="start" --log_path=systemd --line_match="HTTP Server:"
 
 ynh_systemd_action --service_name=nginx --action=reload
 

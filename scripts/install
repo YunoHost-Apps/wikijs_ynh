@@ -10,25 +10,21 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# RETRIEVE ARGUMENTS FROM THE MANIFEST
+# INITIALIZE AND STORE SETTINGS
 #=================================================
 
 ldap_user="svc_${app}_ldap"
 ldap_password=$(ynh_string_random --length=8)
 
-#=================================================
-# STORE SETTINGS FROM MANIFEST
-#=================================================
-
-ynh_app_setting_set --app=$app --key=ldap_user --value=$ldap_user
-ynh_app_setting_set --app=$app --key=ldap_password --value=$ldap_password
+ynh_app_setting_set --app="$app" --key=ldap_user --value="$ldap_user"
+ynh_app_setting_set --app="$app" --key=ldap_password --value="$ldap_password"
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing dependencies..."
+ynh_script_progression --message="Installing NodeJS..."
 
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
+ynh_exec_warn_less ynh_install_nodejs --nodejs_version="$nodejs_version"
 ynh_use_nodejs
 
 #=================================================
@@ -47,29 +43,7 @@ ynh_script_progression --message="Setting up source files..."
 ynh_setup_source --dest_dir="$install_dir"
 
 chmod -R o-rwx "$install_dir"
-chown -R $app:$app "$install_dir"
-
-#=================================================
-# SETUP SYSTEMD
-#=================================================
-ynh_script_progression --message="Configuring a systemd service..."
-
-# Create a dedicated NGINX config
-ynh_add_nginx_config
-
-# Create a dedicated systemd config
-ynh_add_systemd_config
-
-yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
-
-#=================================================
-# SPECIFIC SETUP
-#=================================================
-# CREATE LDAP USER
-#=================================================
-ynh_script_progression --message="Creating LDAP user..."
-
-yunohost user create $ldap_user --fullname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
+chown -R "$app:$app" "$install_dir"
 
 #=================================================
 # ADD A CONFIGURATION
@@ -79,7 +53,26 @@ ynh_script_progression --message="Adding a configuration file..."
 ynh_add_config --template="config.sample.yml" --destination="$install_dir/config.yml"
 
 chmod 400 "$install_dir/config.yml"
-chown $app:$app "$install_dir/config.yml"
+chown "$app:$app" "$install_dir/config.yml"
+
+#=================================================
+# SYSTEM CONFIGURATION
+#=================================================
+ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
+
+# Create a dedicated NGINX config
+ynh_add_nginx_config
+
+# Create a dedicated systemd config
+ynh_add_systemd_config
+yunohost service add "$app" --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
+
+#=================================================
+# CREATE LDAP USER
+#=================================================
+ynh_script_progression --message="Creating LDAP user..."
+
+yunohost user create "$ldap_user" --fullname "SvcWikijsLdap" --domain "$domain" --password "$ldap_password" -q 0
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -87,7 +80,7 @@ chown $app:$app "$install_dir/config.yml"
 ynh_script_progression --message="Starting a systemd service..."
 
 # Start a systemd service
-ynh_systemd_action --service_name=$app --action="start" --log_path=systemd --line_match="HTTP Server:"
+ynh_systemd_action --service_name="$app" --action="start" --log_path=systemd --line_match="HTTP Server:"
 
 #=================================================
 # END OF SCRIPT

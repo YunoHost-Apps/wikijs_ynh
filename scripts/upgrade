@@ -30,48 +30,13 @@ ynh_systemd_action --service_name=$app --action="stop" --log_path=systemd
 ynh_script_progression --message="Ensuring downward compatibility..."
 
 # If ldap_user doesn't exist, retrieve it or create it
-if [[ -z "$ldap_user" ]]; then
-	ldap_user="svc_${app}_ldap"
-	ldap_password=$(ynh_string_random --length=8)
-	ynh_app_setting_set "$app" ldap_user "$ldap_user"
-	ynh_app_setting_set "$app" ldap_password "$ldap_password"
-	yunohost user create $ldap_user --fullname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
+if [[ -z "${ldap_user:-}" ]]; then
+    ldap_user="svc_${app}_ldap"
+    ldap_password=$(ynh_string_random --length=8)
+    ynh_app_setting_set "$app" ldap_user "$ldap_user"
+    ynh_app_setting_set "$app" ldap_password "$ldap_password"
+    yunohost user create "$ldap_user" --fullname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
 fi
-
-#=================================================
-# DOWNLOAD, CHECK AND UNPACK SOURCE
-#=================================================
-
-if [ "$upgrade_type" == "UPGRADE_APP" ]
-then
-	ynh_script_progression --message="Upgrading source files..."
-
-	config_file="$install_dir/config.yml"
-	tmpdir="$(mktemp -d)"
-
-	rsync -a "$config_file" "$tmpdir/."
-	if [ -d "$install_dir/.ssh" ]; then
-		rsync -a "$install_dir/.ssh" "$tmpdir/."
-	fi
-	if [ -d "$install_dir/data" ]; then
-		rsync -a "$install_dir/data" "$tmpdir/."
-	fi
-	ynh_secure_remove --file="$install_dir"
-
-	# Download, check integrity, uncompress and patch the source from app.src
-	ynh_setup_source --dest_dir="$install_dir"
-
-	rsync -a "$tmpdir/config.yml" "$install_dir/."
-	if [ -d "$tmpdir/.ssh" ]; then
-		rsync -a "$tmpdir/.ssh" "$install_dir/."
-	fi
-	if [ -d "$tmpdir/data" ]; then
-		rsync -a "$tmpdir/data" "$install_dir/."
-	fi
-fi
-
-chmod -R o-rwx "$install_dir"
-chown -R $app:$app "$install_dir"
 
 #=================================================
 # UPGRADE DEPENDENCIES
@@ -82,20 +47,15 @@ ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 ynh_use_nodejs
 
 #=================================================
-# NGINX CONFIGURATION
+# DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..."
+ynh_script_progression --message="Upgrading source files..."
 
-# Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_setup_source --dest_dir="$install_dir" --full_replace=1 --keep="config.yml .ssh data"
 
-# Create a dedicated systemd config
-ynh_add_systemd_config
+chmod -R o-rwx "$install_dir"
+chown -R "$app:$app" "$install_dir"
 
-yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
-
-#=================================================
-# SPECIFIC UPGRADE
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
@@ -104,14 +64,26 @@ ynh_script_progression --message="Updating a configuration file..."
 ynh_add_config --template="config.sample.yml" --destination="$install_dir/config.yml"
 
 chmod 400 "$install_dir/config.yml"
-chown $app:$app "$install_dir/config.yml"
+chown "$app:$app" "$install_dir/config.yml"
+
+#=================================================
+# REAPPLY SYSTEM CONFIGURATIONS
+#=================================================
+ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
+
+# Create a dedicated NGINX config
+ynh_add_nginx_config
+
+# Create a dedicated systemd config
+ynh_add_systemd_config
+yunohost service add "$app" --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..."
 
-ynh_systemd_action --service_name=$app --action="start" --log_path=systemd --line_match="HTTP Server:"
+ynh_systemd_action --service_name="$app" --action="start" --log_path=systemd --line_match="HTTP Server:"
 
 #=================================================
 # END OF SCRIPT

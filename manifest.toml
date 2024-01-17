@@ -38,10 +38,10 @@ ram.runtime = "50M"
     default = "visitors"
 
 [resources]
-        [resources.sources.main]
-        url = "https://github.com/Requarks/wiki/releases/download/v2.5.298/wiki-js.tar.gz"
-        sha256 = "3bb290d77e3387dba5958c906629a6c5f751c17787903f1a021cbfa51cc88f1a"
-        in_subdir = false
+    [resources.sources.main]
+    url = "https://github.com/Requarks/wiki/releases/download/v2.5.298/wiki-js.tar.gz"
+    sha256 = "3bb290d77e3387dba5958c906629a6c5f751c17787903f1a021cbfa51cc88f1a"
+    in_subdir = false
 
     [resources.ports]
 
