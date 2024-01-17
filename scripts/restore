@@ -51,7 +51,7 @@ ynh_psql_execute_file_as_root --file="./db.sql" --database="$db_name"
 #=================================================
 ynh_script_progression --message="Creating LDAP user..."
 
-yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
+yunohost user create $ldap_user --fullname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
 
 #=================================================
 # RESTORE SYSTEMD

@@ -35,7 +35,7 @@ if [[ -z "$ldap_user" ]]; then
 	ldap_password=$(ynh_string_random --length=8)
 	ynh_app_setting_set "$app" ldap_user "$ldap_user"
 	ynh_app_setting_set "$app" ldap_password "$ldap_password"
-	yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
+	yunohost user create $ldap_user --fullname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
 fi
 
 #=================================================

@@ -69,7 +69,7 @@ yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/lo
 #=================================================
 ynh_script_progression --message="Creating LDAP user..."
 
-yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
+yunohost user create $ldap_user --fullname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
 
 #=================================================
 # ADD A CONFIGURATION
