@@ -7,46 +7,13 @@
 #=================================================
 
 source _common.sh
-source ynh_send_readme_to_admin__2
 source /usr/share/yunohost/helpers
-
-#=================================================
-# LOAD SETTINGS
-#=================================================
-ynh_script_progression --message="Loading settings..."
-
-app=$YNH_APP_INSTANCE_NAME
-
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-db_name=$(ynh_app_setting_get --app=$app --key=db_name)
-db_pwd=$(ynh_app_setting_get --app=$app --key=psqlpwd)
-port=$(ynh_app_setting_get --app=$app --key=port)
-ldap_user=$(ynh_app_setting_get --app=$app --key=ldap_user)
-ldap_password=$(ynh_app_setting_get --app=$app --key=ldap_password)
 
 #=================================================
 # CHECK VERSION
 #=================================================
-ynh_script_progression --message="Checking version..."
 
 upgrade_type=$(ynh_check_app_version_changed)
-
-#=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..."
-
-# Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
-	ynh_clean_check_starting
-	# Restore it if the upgrade fails
-	ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
 
 #=================================================
 # STANDARD UPGRADE STEPS
@@ -63,148 +30,60 @@ ynh_systemd_action --service_name=$app --action="stop" --log_path=systemd
 ynh_script_progression --message="Ensuring downward compatibility..."
 
 # If ldap_user doesn't exist, retrieve it or create it
-if [[ -z "$ldap_user" ]]; then
-	ldap_user="svc_${app}_ldap"
-	ldap_password=$(ynh_string_random --length=8)
-	ynh_app_setting_set "$app" ldap_user "$ldap_user"
-	ynh_app_setting_set "$app" ldap_password "$ldap_password"
-	yunohost user create $ldap_user --firstname "SvcWikijsLdap" --lastname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
+if [[ -z "${ldap_user:-}" ]]; then
+    ldap_user="svc_${app}_ldap"
+    ldap_password=$(ynh_string_random --length=8)
+    ynh_app_setting_set "$app" ldap_user "$ldap_user"
+    ynh_app_setting_set "$app" ldap_password "$ldap_password"
+    yunohost user create "$ldap_user" --fullname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
 fi
-
-# Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
-
-	ynh_app_setting_delete --app=$app --key=is_public
-fi
-
-ynh_permission_url --permission="main" --auth_header=false
-
-# Remove yarn repository
-ynh_secure_remove --file="/etc/apt/sources.list.d/yarn.list"
-
-# Remove old log file
-ynh_secure_remove --file="/var/log/$app/"
-
-# Create PostgreSQL User
-ynh_psql_create_user $db_name $db_pwd
-
-# Install pg_trgm extension to provide a PostgreSQL search solution
-ynh_psql_test_if_first_run
-ynh_psql_execute_as_root --sql="CREATE EXTENSION IF NOT EXISTS pg_trgm;" --database=$db_name
-
-# Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
-
-	ynh_app_setting_delete --app=$app --key=is_public
-fi
-
-ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..."
-
-# Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir="$final_path"
-
-#=================================================
-# DOWNLOAD, CHECK AND UNPACK SOURCE
-#=================================================
-
-if [ "$upgrade_type" == "UPGRADE_APP" ]
-then
-	ynh_script_progression --message="Upgrading source files..."
-
-	config_file="$final_path/config.yml"
-	tmpdir="$(mktemp -d)"
-
-	rsync -a "$config_file" "$tmpdir/."
-	if [ -d "$final_path/.ssh" ]; then
-		rsync -a "$final_path/.ssh" "$tmpdir/."
-	fi
-	if [ -d "$final_path/data" ]; then
-		rsync -a "$final_path/data" "$tmpdir/."
-	fi
-	ynh_secure_remove --file="$final_path"
-
-	# Download, check integrity, uncompress and patch the source from app.src
-	ynh_setup_source --dest_dir="$final_path"
-
-	rsync -a "$tmpdir/config.yml" "$final_path/."
-	if [ -d "$tmpdir/.ssh" ]; then
-		rsync -a "$tmpdir/.ssh" "$final_path/."
-	fi
-	if [ -d "$tmpdir/data" ]; then
-		rsync -a "$tmpdir/data" "$final_path/."
-	fi
-fi
-
-chmod 750 "$final_path"
-chmod -R o-rwx "$final_path"
-chown -R $app:$app "$final_path"
 
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
 ynh_script_progression --message="Upgrading dependencies..."
 
-ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 ynh_use_nodejs
 
 #=================================================
-# NGINX CONFIGURATION
+# DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..."
+ynh_script_progression --message="Upgrading source files..."
 
-# Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_setup_source --dest_dir="$install_dir" --full_replace=1 --keep="config.yml .ssh data"
 
-#=================================================
-# SPECIFIC UPGRADE
+chmod -R o-rwx "$install_dir"
+chown -R "$app:$app" "$install_dir"
+
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
 ynh_script_progression --message="Updating a configuration file..."
 
-ynh_add_config --template="../conf/config.sample.yml" --destination="$final_path/config.yml"
+ynh_add_config --template="config.sample.yml" --destination="$install_dir/config.yml"
 
-chmod 400 "$final_path/config.yml"
-chown $app:$app "$final_path/config.yml"
+chmod 400 "$install_dir/config.yml"
+chown "$app:$app" "$install_dir/config.yml"
 
 #=================================================
-# SETUP SYSTEMD
+# REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Upgrading systemd configuration..."
+ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
+
+# Create a dedicated NGINX config
+ynh_add_nginx_config
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..."
-
-yunohost service add $app --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
+yunohost service add "$app" --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..."
 
-ynh_systemd_action --service_name=$app --action="start" --log_path=systemd --line_match="HTTP Server:"
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression --message="Reloading NGINX web server..."
-
-ynh_systemd_action --service_name=nginx --action=reload
+ynh_systemd_action --service_name="$app" --action="start" --log_path=systemd --line_match="HTTP Server:"
 
 #=================================================
 # END OF SCRIPT
