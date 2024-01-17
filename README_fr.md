@@ -19,19 +19,13 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 Wiki.js is a copylefted libre software, modern and powerful wiki app built on Node.js, Git and Markdown for YunoHost.
 
 
-**Version incluse :** 2.5.300~ynh3
+**Version incluse :** 2.5.300~ynh4
 
 **Démo :** https://docs-beta.requarks.io/
 
 ## Captures d’écran
 
 ![Capture d’écran de Wiki.js](./doc/screenshots/screenshot1.png)
-
-## Avertissements / informations importantes
-
-* **Wiki.js** requires a dedicated **root domain**, e.g. wikijs.domain.tld
-* LDAP is implemented, root will receive an e-mail at the end of the installation or the upgrade with the info on how to configure LDAP.
-* No HTTP auth for now, but planned for the future.
 
 ## Documentations et ressources
 

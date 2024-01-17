@@ -4,9 +4,6 @@
 # COMMON VARIABLES
 #=================================================
 
-# dependencies used by the app
-pkg_dependencies="postgresql postgresql-contrib rsync"
-
 nodejs_version=16
 
 #=================================================
