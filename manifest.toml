@@ -1,3 +1,5 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+
 packaging_format = 2
 
 id = "wikijs"
@@ -5,7 +7,7 @@ name = "Wiki.js"
 description.en = "Open source powerful wiki app built on Node.js, Git and Markdown"
 description.fr = "Wiki open source propulsé par Node.js, Git et Markdown"
 
-version = "2.5.298~ynh1"
+version = "2.5.298~ynh2"
 
 maintainers = ["yalh76"]
 
@@ -42,6 +44,9 @@ ram.runtime = "50M"
     url = "https://github.com/Requarks/wiki/releases/download/v2.5.298/wiki-js.tar.gz"
     sha256 = "3bb290d77e3387dba5958c906629a6c5f751c17787903f1a021cbfa51cc88f1a"
     in_subdir = false
+
+    autoupdate.strategy = "latest_github_release"
+    autoupdate.asset = "wiki-js.tar.gz"
 
     [resources.ports]
 
