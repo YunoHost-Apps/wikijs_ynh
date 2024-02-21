@@ -7,7 +7,7 @@ name = "Wiki.js"
 description.en = "Open source powerful wiki app built on Node.js, Git and Markdown"
 description.fr = "Wiki open source propulsé par Node.js, Git et Markdown"
 
-version = "2.5.301~ynh1"
+version = "2.5.301~ynh2"
 
 maintainers = ["yalh76"]
 
