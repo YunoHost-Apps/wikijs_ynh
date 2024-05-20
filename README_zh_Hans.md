@@ -3,7 +3,7 @@
 请勿手动编辑。
 -->
 
-# YunoHost 的 Wiki.js
+# YunoHost 上的 Wiki.js
 
 [![集成程度](https://dash.yunohost.org/integration/wikijs.svg)](https://dash.yunohost.org/appci/app/wikijs) ![工作状态](https://ci-apps.yunohost.org/ci/badges/wikijs.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/wikijs.maintain.svg)
 
@@ -19,7 +19,7 @@
 Wiki.js is a copylefted libre software, modern and powerful wiki app built on Node.js, Git and Markdown for YunoHost.
 
 
-**分发版本：** 2.5.302~ynh1
+**分发版本：** 2.5.303~ynh1
 
 **演示：** <https://docs-beta.requarks.io/>
 

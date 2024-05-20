@@ -7,7 +7,7 @@ name = "Wiki.js"
 description.en = "Open source powerful wiki app built on Node.js, Git and Markdown"
 description.fr = "Wiki open source propulsé par Node.js, Git et Markdown"
 
-version = "2.5.302~ynh1"
+version = "2.5.303~ynh1"
 
 maintainers = ["yalh76"]
 
@@ -41,8 +41,8 @@ ram.runtime = "50M"
 
 [resources]
     [resources.sources.main]
-    url = "https://github.com/requarks/wiki/releases/download/v2.5.302/wiki-js.tar.gz"
-    sha256 = "873ea97e239b560a15024631d09b3a0dcdf5d2634c0bd413d83fac36ab25e0b0"
+    url = "https://github.com/requarks/wiki/releases/download/v2.5.303/wiki-js.tar.gz"
+    sha256 = "269bf80fe95d18fbc9cfef1cc0d86b982f888b9746d143930b924858fc14cef9"
 
     in_subdir = false
 
