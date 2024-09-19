@@ -5,7 +5,7 @@ NON debe editarse manualmente.
 
 # Wiki.js para YunoHost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/wikijs.svg)](https://dash.yunohost.org/appci/app/wikijs) ![Estado de funcionamento](https://ci-apps.yunohost.org/ci/badges/wikijs.status.svg) ![Estado de mantemento](https://ci-apps.yunohost.org/ci/badges/wikijs.maintain.svg)
+[![Nivel de integración](https://dash.yunohost.org/integration/wikijs.svg)](https://ci-apps.yunohost.org/ci/apps/wikijs/) ![Estado de funcionamento](https://ci-apps.yunohost.org/ci/badges/wikijs.status.svg) ![Estado de mantemento](https://ci-apps.yunohost.org/ci/badges/wikijs.maintain.svg)
 
 [![Instalar Wiki.js con YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=wikijs)
 
@@ -19,7 +19,7 @@ NON debe editarse manualmente.
 Wiki.js is a copylefted libre software, modern and powerful wiki app built on Node.js, Git and Markdown for YunoHost.
 
 
-**Versión proporcionada:** 2.5.303~ynh1
+**Versión proporcionada:** 2.5.304~ynh1
 
 **Demo:** <https://docs-beta.requarks.io/>
 
