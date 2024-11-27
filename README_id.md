@@ -5,7 +5,9 @@ Ini TIDAK boleh diedit dengan tangan.
 
 # Wiki.js untuk YunoHost
 
-[![Tingkat integrasi](https://dash.yunohost.org/integration/wikijs.svg)](https://ci-apps.yunohost.org/ci/apps/wikijs/) ![Status kerja](https://ci-apps.yunohost.org/ci/badges/wikijs.status.svg) ![Status pemeliharaan](https://ci-apps.yunohost.org/ci/badges/wikijs.maintain.svg)
+[![Tingkat integrasi](https://apps.yunohost.org/badge/integration/wikijs)](https://ci-apps.yunohost.org/ci/apps/wikijs/)
+![Status kerja](https://apps.yunohost.org/badge/state/wikijs)
+![Status pemeliharaan](https://apps.yunohost.org/badge/maintained/wikijs)
 
 [![Pasang Wiki.js dengan YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=wikijs)
 

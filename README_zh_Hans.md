@@ -5,7 +5,9 @@
 
 # YunoHost 上的 Wiki.js
 
-[![集成程度](https://dash.yunohost.org/integration/wikijs.svg)](https://ci-apps.yunohost.org/ci/apps/wikijs/) ![工作状态](https://ci-apps.yunohost.org/ci/badges/wikijs.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/wikijs.maintain.svg)
+[![集成程度](https://apps.yunohost.org/badge/integration/wikijs)](https://ci-apps.yunohost.org/ci/apps/wikijs/)
+![工作状态](https://apps.yunohost.org/badge/state/wikijs)
+![维护状态](https://apps.yunohost.org/badge/maintained/wikijs)
 
 [![使用 YunoHost 安装 Wiki.js](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=wikijs)
 

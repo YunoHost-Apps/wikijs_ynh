@@ -5,7 +5,9 @@
 
 # Wiki.js для YunoHost
 
-[![Уровень интеграции](https://dash.yunohost.org/integration/wikijs.svg)](https://ci-apps.yunohost.org/ci/apps/wikijs/) ![Состояние работы](https://ci-apps.yunohost.org/ci/badges/wikijs.status.svg) ![Состояние сопровождения](https://ci-apps.yunohost.org/ci/badges/wikijs.maintain.svg)
+[![Уровень интеграции](https://apps.yunohost.org/badge/integration/wikijs)](https://ci-apps.yunohost.org/ci/apps/wikijs/)
+![Состояние работы](https://apps.yunohost.org/badge/state/wikijs)
+![Состояние сопровождения](https://apps.yunohost.org/badge/maintained/wikijs)
 
 [![Установите Wiki.js с YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=wikijs)
 

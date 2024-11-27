@@ -5,7 +5,9 @@ Hij mag NIET handmatig aangepast worden.
 
 # Wiki.js voor Yunohost
 
-[![Integratieniveau](https://dash.yunohost.org/integration/wikijs.svg)](https://ci-apps.yunohost.org/ci/apps/wikijs/) ![Mate van functioneren](https://ci-apps.yunohost.org/ci/badges/wikijs.status.svg) ![Onderhoudsstatus](https://ci-apps.yunohost.org/ci/badges/wikijs.maintain.svg)
+[![Integratieniveau](https://apps.yunohost.org/badge/integration/wikijs)](https://ci-apps.yunohost.org/ci/apps/wikijs/)
+![Mate van functioneren](https://apps.yunohost.org/badge/state/wikijs)
+![Onderhoudsstatus](https://apps.yunohost.org/badge/maintained/wikijs)
 
 [![Wiki.js met Yunohost installeren](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=wikijs)
 
