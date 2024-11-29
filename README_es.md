@@ -5,7 +5,9 @@ No se debe editar a mano.
 
 # Wiki.js para Yunohost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/wikijs.svg)](https://dash.yunohost.org/appci/app/wikijs) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/wikijs.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/wikijs.maintain.svg)
+[![Nivel de integración](https://apps.yunohost.org/badge/integration/wikijs)](https://ci-apps.yunohost.org/ci/apps/wikijs/)
+![Estado funcional](https://apps.yunohost.org/badge/state/wikijs)
+![Estado En Mantención](https://apps.yunohost.org/badge/maintained/wikijs)
 
 [![Instalar Wiki.js con Yunhost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=wikijs)
 
@@ -19,7 +21,7 @@ No se debe editar a mano.
 Wiki.js is a copylefted libre software, modern and powerful wiki app built on Node.js, Git and Markdown for YunoHost.
 
 
-**Versión actual:** 2.5.303~ynh1
+**Versión actual:** 2.5.305~ynh1
 
 **Demo:** <https://docs-beta.requarks.io/>
 
@@ -37,7 +39,7 @@ Wiki.js is a copylefted libre software, modern and powerful wiki app built on No
 
 ## Información para desarrolladores
 
-Por favor enviar sus correcciones a la [`branch testing`](https://github.com/YunoHost-Apps/wikijs_ynh/tree/testing
+Por favor enviar sus correcciones a la [rama `testing`](https://github.com/YunoHost-Apps/wikijs_ynh/tree/testing).
 
 Para probar la rama `testing`, sigue asÍ:
 
