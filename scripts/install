@@ -1,11 +1,5 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
@@ -16,74 +10,72 @@ source /usr/share/yunohost/helpers
 ldap_user="svc_${app}_ldap"
 ldap_password=$(ynh_string_random --length=8)
 
-ynh_app_setting_set --app="$app" --key=ldap_user --value="$ldap_user"
-ynh_app_setting_set --app="$app" --key=ldap_password --value="$ldap_password"
+ynh_app_setting_set --key=ldap_user --value="$ldap_user"
+ynh_app_setting_set --key=ldap_password --value="$ldap_password"
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing NodeJS..."
+ynh_script_progression "Installing NodeJS..."
 
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version="$nodejs_version"
-ynh_use_nodejs
+ynh_nodejs_install
 
 #=================================================
 # CREATE A POSTGRESQL DATABASE
 #=================================================
-ynh_script_progression --message="Creating a PostgreSQL database..."
+ynh_script_progression "Creating a PostgreSQL database..."
 
-ynh_psql_execute_as_root --sql="CREATE EXTENSION IF NOT EXISTS pg_trgm;" --database=$db_name
+ynh_psql_db_shell <<< "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Setting up source files..."
+ynh_script_progression "Setting up source files..."
 
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir"
 
-chmod -R o-rwx "$install_dir"
-chown -R "$app:$app" "$install_dir"
-
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R "$app:$app" "$install_dir"
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding a configuration file..."
+ynh_script_progression "Adding $app's configuration..."
 
-ynh_add_config --template="config.sample.yml" --destination="$install_dir/config.yml"
+ynh_config_add --template="config.sample.yml" --destination="$install_dir/config.yml"
 
-chmod 400 "$install_dir/config.yml"
-chown "$app:$app" "$install_dir/config.yml"
+#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$install_dir/config.yml"
+#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown "$app:$app" "$install_dir/config.yml"
 
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
+ynh_script_progression "Adding system configurations related to $app..."
 
 # Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_config_add_nginx
 
 # Create a dedicated systemd config
-ynh_add_systemd_config
+ynh_config_add_systemd
 yunohost service add "$app" --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
 
 #=================================================
 # CREATE LDAP USER
 #=================================================
-ynh_script_progression --message="Creating LDAP user..."
+ynh_script_progression "Creating LDAP user..."
 
 yunohost user create "$ldap_user" --fullname "SvcWikijsLdap" --domain "$domain" --password "$ldap_password" -q 0
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..."
+ynh_script_progression "Starting $app's systemd service..."
 
 # Start a systemd service
-ynh_systemd_action --service_name="$app" --action="start" --log_path=systemd --line_match="HTTP Server:"
+ynh_systemctl --service="$app" --action="start" --log_path=systemd --wait_until="HTTP Server:"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed"
+ynh_script_progression "Installation of $app completed"
