@@ -21,7 +21,7 @@ Ini TIDAK boleh diedit dengan tangan.
 Wiki.js is a copylefted libre software, modern and powerful wiki app built on Node.js, Git and Markdown for YunoHost.
 
 
-**Versi terkirim:** 2.5.305~ynh1
+**Versi terkirim:** 2.5.306~ynh1
 
 **Demo:** <https://docs-beta.requarks.io/>
 
