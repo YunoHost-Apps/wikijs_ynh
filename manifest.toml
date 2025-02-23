@@ -19,13 +19,12 @@ userdoc = "https://docs-beta.requarks.io/"
 code = "https://github.com/Requarks/wiki"
 
 [integration]
-yunohost = ">= 11.2.18"
+yunohost = ">= 12.0.9"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
 
 ldap = true
-
 sso = false
 
 disk = "50M"
