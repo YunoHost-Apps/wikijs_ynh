@@ -27,7 +27,7 @@ Wiki.js is a copylefted libre software, modern and powerful wiki app built on No
 
 ## Tangkapan Layar
 
-![Tangkapan Layar pada Wiki.js](./doc/screenshots/screenshot1.png)
+![Tangkapan Layar pada Wiki.js](./doc/screenshots/screenshot.png)
 
 ## Dokumentasi dan sumber daya
 

@@ -27,7 +27,7 @@ Wiki.js is a copylefted libre software, modern and powerful wiki app built on No
 
 ## 截图
 
-![Wiki.js 的截图](./doc/screenshots/screenshot1.png)
+![Wiki.js 的截图](./doc/screenshots/screenshot.png)
 
 ## 文档与资源
 
