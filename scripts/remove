@@ -1,34 +1,25 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
-#=================================================
-# STANDARD REMOVE
 #=================================================
 # REMOVE SERVICE INTEGRATION IN YUNOHOST
 #=================================================
 
 # Remove the service from the list of services known by YunoHost (added from `yunohost service add`)
-if ynh_exec_warn_less yunohost service status $app >/dev/null; then
-    ynh_script_progression --message="Removing $app service integration..."
+if ynh_hide_warnings yunohost service status $app >/dev/null; then
     yunohost service remove "$app"
 fi
 
 # Remove the dedicated systemd config
-ynh_remove_systemd_config
+ynh_config_remove_systemd
 
 # Remove the dedicated NGINX config
-ynh_remove_nginx_config
+ynh_config_remove_nginx
 
 # Remove metapackage and its dependencies
-ynh_remove_nodejs
+ynh_nodejs_remove
 
 yunohost user delete $ldap_user --purge
 
@@ -36,4 +27,4 @@ yunohost user delete $ldap_user --purge
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Removal of $app completed"
+ynh_script_progression "Removal of $app completed"

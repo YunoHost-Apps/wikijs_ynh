@@ -1,33 +1,19 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# CHECK VERSION
-#=================================================
-
-upgrade_type=$(ynh_check_app_version_changed)
-
-#=================================================
-# STANDARD UPGRADE STEPS
-#=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping a systemd service..."
+ynh_script_progression "Stopping $app's systemd service..."
 
-ynh_systemd_action --service_name=$app --action="stop" --log_path=systemd
+ynh_systemctl --service=$app --action="stop" --log_path=systemd
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_script_progression --message="Ensuring downward compatibility..."
+ynh_script_progression "Ensuring downward compatibility..."
 
 # If ldap_user doesn't exist, retrieve it or create it
 if [[ -z "${ldap_user:-}" ]]; then
@@ -41,52 +27,46 @@ fi
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..."
+ynh_script_progression "Upgrading dependencies..."
 
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
-ynh_use_nodejs
+ynh_nodejs_install
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Upgrading source files..."
+ynh_script_progression "Upgrading source files..."
 
-ynh_setup_source --dest_dir="$install_dir" --full_replace=1 --keep="config.yml .ssh data"
-
-chmod -R o-rwx "$install_dir"
-chown -R "$app:$app" "$install_dir"
+ynh_setup_source --dest_dir="$install_dir" --full_replace --keep="config.yml .ssh data"
 
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression --message="Updating a configuration file..."
+ynh_script_progression "Updating configuration..."
 
-ynh_add_config --template="config.sample.yml" --destination="$install_dir/config.yml"
-
-chmod 400 "$install_dir/config.yml"
-chown "$app:$app" "$install_dir/config.yml"
+ynh_config_add --template="config.sample.yml" --destination="$install_dir/config.yml"
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
+ynh_script_progression "Upgrading system configurations related to $app..."
 
 # Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_config_add_nginx
 
 # Create a dedicated systemd config
-ynh_add_systemd_config
+ynh_config_add_systemd
+
 yunohost service add "$app" --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..."
+ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemd_action --service_name="$app" --action="start" --log_path=systemd --line_match="HTTP Server:"
+ynh_systemctl --service="$app" --action="start" --log_path=systemd --wait_until="HTTP Server:"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed"
+ynh_script_progression "Upgrade of $app completed"
