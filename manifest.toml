@@ -4,8 +4,8 @@ packaging_format = 2
 
 id = "wikijs"
 name = "Wiki.js"
-description.en = "Open source powerful wiki app built on Node.js, Git and Markdown"
-description.fr = "Wiki open source propulsé par Node.js, Git et Markdown"
+description.en = "Powerful and extensible Wiki"
+description.fr = "Wiki puissant et extensible"
 
 version = "2.5.306~ynh1"
 
@@ -19,12 +19,13 @@ userdoc = "https://docs-beta.requarks.io/"
 code = "https://github.com/Requarks/wiki"
 
 [integration]
-yunohost = ">= 12.0.9"
+yunohost = ">= 11.2.30"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
 
 ldap = true
+
 sso = false
 
 disk = "50M"
