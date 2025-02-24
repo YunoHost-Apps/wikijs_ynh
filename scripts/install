@@ -25,9 +25,9 @@ ynh_script_progression "Installing NodeJS..."
 ynh_nodejs_install
 
 #=================================================
-# CREATE A POSTGRESQL DATABASE
+# COINFIGURING A POSTGRESQL DATABASE
 #=================================================
-ynh_script_progression "Creating a PostgreSQL database..."
+ynh_script_progression "Configuring a PostgreSQL database..."
 
 ynh_psql_db_shell <<< "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
 
