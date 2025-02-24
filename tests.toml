@@ -7,3 +7,13 @@ test_format = 1.0
     # ------------
     # Tests to run
     # ------------
+
+    # -------------------------------
+    # Default args to use for install
+    # -------------------------------
+
+    # -------------------------------
+    # Commits to test upgrade from
+    # -------------------------------
+
+    test_upgrade_from.90cd310549f42d495b2e88a0d82c23da8e6a1fd6.name = "Upgrade from 2.5.306~ynh1"
