@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 # Keep this path for calling _common.sh inside the execution's context of backup and restore scripts
 source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
@@ -42,9 +46,9 @@ yunohost service add "$app" --description="$app daemon for Wiki.js" --log="/var/
 yunohost user create "$ldap_user" --fullname "SvcWikijsLdap" --domain "$domain" --password "$ldap_password" -q 0
 
 #=================================================
-# START SYSTEMD SERVICE
+# RELOAD NGINX AND PHP-FPM OR THE APP SERVICE
 #=================================================
-ynh_script_progression "Starting $app's systemd service..."
+ynh_script_progression "Reloading NGINX web server and $app's service..."
 
 ynh_systemctl --service="$app" --action="start" --log_path=systemd --wait_until="HTTP Server:"
 

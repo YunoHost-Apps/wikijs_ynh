@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source _common.sh
 source /usr/share/yunohost/helpers
 
@@ -8,7 +12,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Stopping $app's systemd service..."
 
-ynh_systemctl --service=$app --action="stop" --log_path=systemd
+ynh_systemctl --service="$app" --action="stop" --log_path=systemd
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -36,12 +40,13 @@ ynh_nodejs_install
 #=================================================
 ynh_script_progression "Upgrading source files..."
 
+# Download, check integrity, uncompress and patch the source from manifest.toml
 ynh_setup_source --dest_dir="$install_dir" --full_replace --keep="config.yml .ssh data"
 
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression "Updating configuration..."
+ynh_script_progression "Updating $app's configuration files..."
 
 ynh_config_add --template="config.sample.yml" --destination="$install_dir/config.yml"
 
@@ -55,7 +60,6 @@ ynh_config_add_nginx
 
 # Create a dedicated systemd config
 ynh_config_add_systemd
-
 yunohost service add "$app" --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
 
 #=================================================
