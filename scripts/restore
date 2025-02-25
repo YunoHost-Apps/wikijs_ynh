@@ -1,8 +1,6 @@
 #!/bin/bash
 
 #=================================================
-# GENERIC START
-#=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
 
@@ -13,54 +11,51 @@ source /usr/share/yunohost/helpers
 #=================================================
 # REINSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Reinstalling NodeJS..."
+ynh_script_progression "Reinstalling NodeJS..."
 
 # Define and install dependencies
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
-ynh_use_nodejs
+ynh_nodejs_install
 
 #=================================================
 # RESTORE THE APP MAIN DIR
 #=================================================
-ynh_script_progression --message="Restoring the app main directory..."
+ynh_script_progression "Restoring the app main directory..."
 
-ynh_restore_file --origin_path="$install_dir"
-
-chmod -R o-rwx "$install_dir"
-chown -R "$app:$app" "$install_dir"
+ynh_restore "$install_dir"
 
 #=================================================
 # RESTORE THE POSTGRESQL DATABASE
 #=================================================
-ynh_script_progression --message="Restoring the PostgreSQL database..."
+ynh_script_progression "Restoring the PostgreSQL database..."
 
-ynh_psql_execute_as_root --sql="CREATE EXTENSION IF NOT EXISTS pg_trgm;" --database=$db_name
-ynh_psql_execute_file_as_root --file="./db.sql" --database="$db_name"
+ynh_psql_db_shell <<< "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
+
+ynh_psql_db_shell < ./db.sql
 
 #=================================================
 # RESTORE SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Restoring system configurations related to $app..." --weight=1
+ynh_script_progression "Restoring system configurations related to $app..."
 
-ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
+ynh_restore "/etc/nginx/conf.d/$domain.d/$app.conf"
 
-ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
+ynh_restore "/etc/systemd/system/$app.service"
 systemctl enable "$app.service" --quiet
 yunohost service add "$app" --description="$app daemon for Wiki.js" --log="/var/log/$app/$app.log"
 
 yunohost user create "$ldap_user" --fullname "SvcWikijsLdap" --domain "$domain" --password "$ldap_password" -q 0
 
 #=================================================
-# START SYSTEMD SERVICE
+# RELOAD NGINX AND PHP-FPM OR THE APP SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..."
+ynh_script_progression "Reloading NGINX web server and $app's service..."
 
-ynh_systemd_action --service_name="$app" --action="start" --log_path=systemd --line_match="HTTP Server:"
+ynh_systemctl --service="$app" --action="start" --log_path=systemd --wait_until="HTTP Server:"
 
-ynh_systemd_action --service_name=nginx --action=reload
+ynh_systemctl --service=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Restoration completed for $app"
+ynh_script_progression "Restoration completed for $app"

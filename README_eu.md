@@ -27,7 +27,7 @@ Wiki.js is a copylefted libre software, modern and powerful wiki app built on No
 
 ## Pantaila-argazkiak
 
-![Wiki.js(r)en pantaila-argazkia](./doc/screenshots/screenshot1.png)
+![Wiki.js(r)en pantaila-argazkia](./doc/screenshots/screenshot.png)
 
 ## Dokumentazioa eta baliabideak
 

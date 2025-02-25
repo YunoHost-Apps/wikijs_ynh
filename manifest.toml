@@ -4,8 +4,8 @@ packaging_format = 2
 
 id = "wikijs"
 name = "Wiki.js"
-description.en = "Open source powerful wiki app built on Node.js, Git and Markdown"
-description.fr = "Wiki open source propulsé par Node.js, Git et Markdown"
+description.en = "Powerful and extensible Wiki"
+description.fr = "Wiki puissant et extensible"
 
 version = "2.5.306~ynh1"
 
@@ -19,7 +19,8 @@ userdoc = "https://docs-beta.requarks.io/"
 code = "https://github.com/Requarks/wiki"
 
 [integration]
-yunohost = ">= 11.2"
+yunohost = ">= 11.2.30"
+helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
 
@@ -41,15 +42,12 @@ ram.runtime = "50M"
 
 [resources]
     [resources.sources.main]
+    in_subdir = false
     url = "https://github.com/requarks/wiki/releases/download/v2.5.306/wiki-js.tar.gz"
     sha256 = "058253ccf51f77e7984731ee3553bf2f736f19e8f4a419d62fafbb02388627f4"
 
-    in_subdir = false
-
     autoupdate.strategy = "latest_github_release"
     autoupdate.asset = "wiki-js.tar.gz"
-
-    [resources.ports]
 
     [resources.system_user]
 
@@ -58,6 +56,8 @@ ram.runtime = "50M"
     [resources.permissions]
     main.url = "/"
     main.auth_header = false
+
+    [resources.ports]
 
     [resources.apt]
     packages = "postgresql"
