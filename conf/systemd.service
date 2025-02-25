@@ -13,8 +13,6 @@ ExecStart=__NODEJS_DIR__/node __INSTALL_DIR__/server
 Restart=always
 
 # Sandboxing options to harden security
-# Depending on specificities of your service/app, you may need to tweak these
-# .. but this should be a good baseline
 # Details for these options: https://www.freedesktop.org/software/systemd/man/systemd.exec.html
 NoNewPrivileges=yes
 PrivateTmp=yes

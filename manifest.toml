@@ -49,8 +49,6 @@ ram.runtime = "50M"
     autoupdate.strategy = "latest_github_release"
     autoupdate.asset = "wiki-js.tar.gz"
 
-    [resources.ports]
-
     [resources.system_user]
 
     [resources.install_dir]
@@ -58,6 +56,8 @@ ram.runtime = "50M"
     [resources.permissions]
     main.url = "/"
     main.auth_header = false
+
+    [resources.ports]
 
     [resources.apt]
     packages = "postgresql"
