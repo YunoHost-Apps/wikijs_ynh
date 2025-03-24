@@ -21,7 +21,7 @@ EZ editatu eskuz.
 Wiki.js is a copylefted libre software, modern and powerful wiki app built on Node.js, Git and Markdown for YunoHost.
 
 
-**Paketatutako bertsioa:** 2.5.306~ynh1
+**Paketatutako bertsioa:** 2.5.307~ynh1
 
 **Demoa:** <https://docs-beta.requarks.io/>
 
@@ -41,7 +41,7 @@ Wiki.js is a copylefted libre software, modern and powerful wiki app built on No
 
 Bidali `pull request`a [`testing` abarrera](https://github.com/YunoHost-Apps/wikijs_ynh/tree/testing).
 
-`testing` abarra probatzeko, ondorengoa egin:
+`testing` abarra probatzeko, honakoa egin:
 
 ```bash
 sudo yunohost app install https://github.com/YunoHost-Apps/wikijs_ynh/tree/testing --debug
