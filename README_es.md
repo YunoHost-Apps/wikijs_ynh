@@ -3,7 +3,7 @@ Este archivo README esta generado automaticamente<https://github.com/YunoHost/ap
 No se debe editar a mano.
 -->
 
-# Wiki.js para Yunohost
+# Wiki.js para YunoHost
 
 [![Nivel de integración](https://apps.yunohost.org/badge/integration/wikijs)](https://ci-apps.yunohost.org/ci/apps/wikijs/)
 ![Estado funcional](https://apps.yunohost.org/badge/state/wikijs)
@@ -21,7 +21,7 @@ No se debe editar a mano.
 Wiki.js is a copylefted libre software, modern and powerful wiki app built on Node.js, Git and Markdown for YunoHost.
 
 
-**Versión actual:** 2.5.306~ynh1
+**Versión actual:** 2.5.307~ynh1
 
 **Demo:** <https://docs-beta.requarks.io/>
 
