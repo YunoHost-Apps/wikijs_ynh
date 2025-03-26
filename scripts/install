@@ -12,7 +12,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 ldap_user="svc_${app}_ldap"
-ldap_password=$(ynh_string_random --length=8)
+ldap_password=$(tr -dc 'A-Za-z0-9!?%=' < /dev/urandom | head -c 24)
 
 ynh_app_setting_set --key=ldap_user --value="$ldap_user"
 ynh_app_setting_set --key=ldap_password --value="$ldap_password"
