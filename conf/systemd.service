@@ -1,5 +1,5 @@
 [Unit]
-Description=__APP__ service
+Description=WikiJS: powerful and extensible wiki
 After=network.target
 
 [Service]
