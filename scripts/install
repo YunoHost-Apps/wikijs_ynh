@@ -4,7 +4,7 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-source _common.sh
+
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -20,9 +20,9 @@ ynh_app_setting_set --key=ldap_password --value="$ldap_password"
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression "Installing NodeJS..."
+#REMOVEME? ynh_script_progression "Installing NodeJS..."
 
-ynh_nodejs_install
+#REMOVEME? ynh_nodejs_install
 
 #=================================================
 # COINFIGURING A POSTGRESQL DATABASE
