@@ -7,7 +7,7 @@ name = "Wiki.js"
 description.en = "Powerful and extensible Wiki"
 description.fr = "Wiki puissant et extensible"
 
-version = "2.5.308~ynh1"
+version = "2.5.309~ynh1"
 
 maintainers = ["yalh76"]
 
@@ -19,7 +19,7 @@ userdoc = "https://docs-beta.requarks.io/"
 code = "https://github.com/Requarks/wiki"
 
 [integration]
-yunohost = ">= 12.0.9"
+yunohost = ">= 12.1.17"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
@@ -42,8 +42,8 @@ ram.runtime = "50M"
 [resources]
     [resources.sources.main]
     in_subdir = false
-    url = "https://github.com/requarks/wiki/releases/download/v2.5.308/wiki-js.tar.gz"
-    sha256 = "0ef324cc6113e547279967019a188593832272d904dcb61aeb6d505b106ed7dd"
+    url = "https://github.com/requarks/wiki/releases/download/v2.5.309/wiki-js.tar.gz"
+    sha256 = "6d3b39f953879361fea120c6f9a64fcd23b7c7a523d2c3832e8ca2054d2dbd88"
 
     autoupdate.strategy = "latest_github_release"
     autoupdate.asset = "wiki-js.tar.gz"
@@ -63,3 +63,6 @@ ram.runtime = "50M"
 
     [resources.database]
     type = "postgresql"
+
+    [resources.nodejs]
+    version = "22"

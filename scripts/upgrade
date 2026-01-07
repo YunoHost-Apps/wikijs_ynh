@@ -4,7 +4,6 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -27,13 +26,6 @@ if [[ -z "${ldap_user:-}" ]]; then
     ynh_app_setting_set "$app" ldap_password "$ldap_password"
     yunohost user create "$ldap_user" --fullname "SvcWikijsLdap" --domain $domain --password $ldap_password -q 0
 fi
-
-#=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-ynh_script_progression "Upgrading dependencies..."
-
-ynh_nodejs_install
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
