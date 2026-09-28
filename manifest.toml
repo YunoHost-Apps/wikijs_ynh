@@ -7,7 +7,7 @@ name = "Wiki.js"
 description.en = "Powerful and extensible Wiki"
 description.fr = "Wiki puissant et extensible"
 
-version = "2.5.314~ynh1"
+version = "2.5.315~ynh1"
 
 maintainers = ["yalh76"]
 
@@ -42,8 +42,8 @@ ram.runtime = "50M"
 [resources]
     [resources.sources.main]
     in_subdir = false
-    url = "https://github.com/requarks/wiki/releases/download/v2.5.314/wiki-js.tar.gz"
-    sha256 = "7a37337ac499fb3fcd168b53b136ba8a79b3c819db1850c273db67974320fdb7"
+    url = "https://github.com/requarks/wiki/releases/download/v2.5.315/wiki-js.tar.gz"
+    sha256 = "34cb53223ff2b00be3cc98cc8190535322b4fcc0a7af1d114c1225143e63f5e4"
 
     autoupdate.strategy = "latest_github_release"
     autoupdate.asset = "wiki-js.tar.gz"
