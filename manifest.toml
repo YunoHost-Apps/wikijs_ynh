@@ -7,7 +7,7 @@ name = "Wiki.js"
 description.en = "Powerful and extensible Wiki"
 description.fr = "Wiki puissant et extensible"
 
-version = "2.5.315~ynh1"
+version = "2.5.315~ynh2"
 
 maintainers = ["yalh76"]
 
